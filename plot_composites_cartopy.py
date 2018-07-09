@@ -168,7 +168,7 @@ def plot2dxy_lag_vector(ufilenames, vfilenames, title='Default lags, ttest, 850 
                     #pivot='mid', units='inches', scale=25, scale_units='width',
                     #headwidth=10, headlength=5, headaxislength=3)
                     pivot='mid', units='inches', scale=50, scale_units='width',
-                    headwidth=3, headlength=2, headaxislength=1.5, lw=0.5)
+                    headwidth=5, headlength=2.5, headaxislength=1.5, lw=0.5)
         #qk = plt.quiverkey(Q, 0.5, 0.15, 2, '2 m/s', coordinates='figure')
         qk = plt.quiverkey(Q, 0.95, 0.95, 2, '2 m/s', coordinates='figure')
 
@@ -180,8 +180,10 @@ def plot2dxy_lag_vector(ufilenames, vfilenames, title='Default lags, ttest, 850 
             ax.set_title('{}\nlag ${}$'.format(title, lag))
         else:
             ax.set_title('lag ${}$'.format(lag))
+    #plt.tight_layout(pad=3, w_pad=-4)
     plt.tight_layout(pad=3, w_pad=-3)
-    fname = 'winds' + str(lvl) + '_harmonics_zoomed.png'
+    #fname = '../images/winds' + str(lvl) + '_harmonics.png'
+    fname = '../images/winds' + str(lvl) + '_harmonics_zoomed.png'
     plt.savefig(fname, dpi=300)
 
 def plot2dxz_lag(filenames, title='Default lags, ttest', lags=[-2,-1,0,1,2], ttest=True):
@@ -237,7 +239,7 @@ def plot2dxz_lag(filenames, title='Default lags, ttest', lags=[-2,-1,0,1,2], tte
             ax.set_title('lag {}'.format(lag))
     plt.tight_layout(pad=1, w_pad=-5)
     fname = 'verticalV_ttest.png'
-    plt.savefig(fname, dpi=300)
+    #plt.savefig(fname, dpi=300)
 
 lags0 = [0]
 lags02 = [-2, 0, 2]
@@ -269,12 +271,16 @@ idir = '/global/scratch/hpeter/composites/'
 
 #plot2dxy_lag('composite_n150_U_JJAS_lag', lags=lags012, ttest=True, lvl=850)
 #plot2dxy_lag('composite_n150_U_JJAS_lag', lags=lags012, ttest=True, lvl=300)
-plot2dxy_lag('composite_n150_V_JJAS_lag', lags=lags012, ttest=True, lvl=850)
-plot2dxy_lag('composite_n150_V_JJAS_lag', lags=lags012, ttest=True, lvl=300)
+#plot2dxy_lag('composite_n150_V_JJAS_lag', lags=lags012, ttest=True, lvl=850)
+#plot2dxy_lag('composite_n150_V_JJAS_lag', lags=lags012, ttest=True, lvl=300)
 
+plot2dxy_lag_vector('composite_n150_U_JJAS_lag', 'composite_n150_V_JJAS_lag', 
+    title='Significant Anomalous Wind (850 mb, n = 150)', lags=lags0, ttest=True, lvl=850)
+plot2dxy_lag_vector('composite_n150_U_JJAS_lag', 'composite_n150_V_JJAS_lag', 
+    title='Significant Anomalous Wind (300 mb, n = 150)', lags=lags0, ttest=True, lvl=300)
 #plot2dxy_lag_vector('composite_n150_U_JJAS_lag', 'composite_n150_V_JJAS_lag', 
-#    title='Significant Anomalous Wind (850 mb, n = 150)', lags=lags0, ttest=True, lvl=850)
+#    title='Significant Anomalous Wind (850 mb, n = 150)', lags=lags012, ttest=True, lvl=850)
 #plot2dxy_lag_vector('composite_n150_U_JJAS_lag', 'composite_n150_V_JJAS_lag', 
-#    title='Significant Anomalous Wind (300 mb, n = 150)', lags=lags0, ttest=True, lvl=300)
+#    title='Significant Anomalous Wind (300 mb, n = 150)', lags=lags012, ttest=True, lvl=300)
 
 plt.show()
