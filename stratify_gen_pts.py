@@ -7,19 +7,12 @@
 
 import numpy as np
 
-odir = '../MD_files/public_trackdata/'
-#odir = '/global/home/users/hpeter/public_trackdata/'
-
 # Load data
-geninits_NH_fname = '../MD_files/public_trackdata/geninits_NH.dat'
-trx_NH_fname      = '../MD_files/public_trackdata/trx_NH.dat'
-PC_dates_fname    = '../MD_files/PC_data/olr.230.westw.2x.5s30n.jja.pc_dates.dat'
-PC_vals_fname     = '../MD_files/PC_data/olr.230.westw.2x.5s30n.jja.pc_vals.dat'
+geninits_NH_fname = '/home/hpeter/Documents/Research2018/MD_files/public_trackdata/geninits_NH.dat'
+trx_NH_fname      = '/home/hpeter/Documents/Research2018/MD_files/public_trackdata/trx_NH.dat'
+PC_dates_fname    = '/home/hpeter/Documents/Research2018/MD_files/PC_data/olr.230.westw.2x.5s30n.jja.pc_dates.dat'
+PC_vals_fname     = '/home/hpeter/Documents/Research2018/MD_files/PC_data/olr.230.westw.2x.5s30n.jja.pc_vals.dat'
 
-#geninits_NH_fname = '/global/home/users/hpeter/public_trackdata/geninits_nh.dat'
-#trx_nh_fname      = '/global/home/users/hpeter/public_trackdata/trx_NH.dat'
-#PC_dates_fname    = '/global/home/users/hpeter/PC_data/olr.230.westw.2x.5s30n.jja.pc_dates.dat'
-#PC_vals_fname     = '/global/home/users/hpeter/PC_data/olr.230.westw.2x.5s30n.jja.pc_vals.dat'
 
 geninits_NH = np.loadtxt(geninits_NH_fname, dtype='int')
 trx_NH = np.loadtxt(trx_NH_fname)
@@ -60,4 +53,4 @@ for i in range(len(gen_pts)):
         strat_indexes[i] = True
 
 data = gen_pts[strat_indexes, :]
-np.savez(odir + 'BoB_genesis_points_stratified.npz', data)
+np.savez('BoB_genesis_points_stratified.npz', data)
