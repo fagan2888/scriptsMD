@@ -6,7 +6,6 @@
 ################################################################################
 
 import numpy as np
-import pandas as pd
 import xarray as xr
 from scipy.stats import ttest_1samp
 import datetime as dt
@@ -48,9 +47,8 @@ while os.path.isfile(out_file):
 log('Creating composites: logging to {}.\n'.format(out_file))
 
 # Load genesis point data
-data_gen_df = pd.read_csv(track_dir + 'BoB_genesis_points.dat', delimiter=' ', names=['lon', 'lat', 'year', 'month', 'day', 'hour', 'intensity'], index_col=False)
-#data_gen_df = data_gen_df.sort_values(by='year')
-data_gen = data_gen_df.values
+data_gen = np.load(track_dir + 'BoB_genesis_points_stratified.npz')
+data_gen = data_gen['arr_0']
 
 #256 lat, 512 lon
 dx = 180 / 256 # dy = 360 / 512 = dx
@@ -174,7 +172,7 @@ for i in range(len(lags)):
     comp_da.values[:, :, :] = data_total_composite[i, :, :, :]
 
     # Save for plotting
-    fname = '{}composite_n{}_{}_JJAS_lag{}_harmonics.nc'.format(composite_dir, N, variable_name, lags[i])
+    fname = '{}composite_n{}_{}_JJAS_lag{}_strat.nc'.format(composite_dir, N, variable_name, lags[i])
     comp_da.to_netcdf(fname)
     log('Data saved in {}.'.format(fname))
 
@@ -184,8 +182,6 @@ for i in range(len(lags)):
     comp_da.values[:, :, :] = data_total_composite[i, :, :, :]
 
     # Save for plotting
-    fname = '{}composite_n{}_{}_JJAS_lag{}_ttest_harmonics.nc'.format(composite_dir, N, variable_name, lags[i])
+    fname = '{}composite_n{}_{}_JJAS_lag{}_ttest_strat.nc'.format(composite_dir, N, variable_name, lags[i])
     comp_da.to_netcdf(fname)
     log('Data saved in {}.'.format(fname))
-
-log('\nTask complete, terminating program.')
