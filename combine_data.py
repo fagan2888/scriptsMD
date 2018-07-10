@@ -20,7 +20,8 @@ name = 'U component of wind'
 label = 'U'
 data_type = 'uv'
 #data_type = 'sc'
-for year in range(1979, 2017): # 2017 only has half a year, stop at 2016
+#for year in range(1979, 2017): # 2017 only has half a year, stop at 2016
+for year in range(1985, 2017): # 2017 only has half a year, stop at 2016
     print(year)
     times = pd.date_range(start=str(year)+'-1-1', end=str(year)+'-12-31', freq='6H')
     data = np.zeros((len(times), 256, 512))
