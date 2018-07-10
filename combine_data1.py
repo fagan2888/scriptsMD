@@ -16,16 +16,16 @@ odir = '/global/scratch/users/hpeter/data/ERA_Interim/'
 #level = 850
 #name = 'Geopotential'
 level = 500
-name = 'U component of wind'
-label = 'U'
+name = 'V component of wind'
+label = 'V'
 data_type = 'uv'
 #data_type = 'sc'
 for year in range(1979, 2017): # 2017 only has half a year, stop at 2016
-    print(year)
     times = pd.date_range(start=str(year)+'-1-1', end=str(year)+'-12-31', freq='6H')
     data = np.zeros((len(times), 256, 512))
     for i in range(len(times)):
         date = times[i].strftime('%Y%m%d%H')
+        print(date)
         grbs = pygrib.open('{}{}/ei.oper.an.pl.regn128{}.{}'.format(idir, year, data_type, date))
         grb = grbs.select(name=name, level=level)[0]
         data[i, :, :] = grb.values
@@ -33,4 +33,4 @@ for year in range(1979, 2017): # 2017 only has half a year, stop at 2016
     lats = lats[:, 0]
     lons = lons[0, :]
     da = xr.DataArray(data, coords=[times, lats, lons], dims=['time', 'lat', 'lon'])
-    da.to_netcdf('{}{}/ei.oper.an.pl.regn128{}.{}_{}mb_{}.nc'.format(odir, year, data_type, label, level, year))
+    da.to_netcdf('{}{}/ei.oper.an.pl.regn128{}.{}_{}mb_{}.nc'.format(odir, year, label, level, data_type, year))
