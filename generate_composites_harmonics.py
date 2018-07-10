@@ -6,6 +6,7 @@
 ################################################################################
 
 import numpy as np
+import pandas as pd
 import xarray as xr
 from scipy.stats import ttest_1samp
 import datetime as dt
@@ -72,8 +73,8 @@ sc:
     CIWC_GDS4_ISBL
     CC_GDS4_ISBL
 '''
-variable = 'V_GDS4_ISBL'
-variable_name = 'V'
+variable = 'U_GDS4_ISBL'
+variable_name = 'U'
 if variable in ['U_GDS4_ISBL', 'V_GDS4_ISBL']:
     data_type = 'uv'
 else:
@@ -172,7 +173,7 @@ for i in range(len(lags)):
     comp_da.values[:, :, :] = data_total_composite[i, :, :, :]
 
     # Save for plotting
-    fname = '{}composite_n{}_{}_JJAS_lag{}_strat.nc'.format(composite_dir, N, variable_name, lags[i])
+    fname = '{}composite_n{}_{}_JJAS_strat_harm_lag{}.nc'.format(composite_dir, N, variable_name, lags[i])
     comp_da.to_netcdf(fname)
     log('Data saved in {}.'.format(fname))
 
@@ -182,6 +183,8 @@ for i in range(len(lags)):
     comp_da.values[:, :, :] = data_total_composite[i, :, :, :]
 
     # Save for plotting
-    fname = '{}composite_n{}_{}_JJAS_lag{}_ttest_strat.nc'.format(composite_dir, N, variable_name, lags[i])
+    fname = '{}composite_n{}_{}_JJAS_strat_harm_ttest_lag{}.nc'.format(composite_dir, N, variable_name, lags[i])
     comp_da.to_netcdf(fname)
     log('Data saved in {}.'.format(fname))
+
+log('\nJob complete, terminating program.')
