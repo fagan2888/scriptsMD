@@ -36,12 +36,13 @@ def get_phase(angle):
         if angle > a1 and angle < a2:
             return phase
 
-def stratify_data(amp_min, amp_max, phases):
+def stratify_data(amp_min, amp_max, phases, mode):
     ''' 
     Stratify the Genesis Point data based on EOF strength/phase.
       amp_min: min threshold amplitude, float
       amp_max: max threshold amplitude, float
       phases:  which phases (1-8) to look for, list
+      mode:    'weekly' or 'biweekly', string
     '''
     strat_indexes = np.zeros(gen_pts.shape[0], dtype=bool)
     for i in range(len(gen_pts)):
@@ -52,10 +53,13 @@ def stratify_data(amp_min, amp_max, phases):
 
             eof1, eof2, eof3, eof4, eof5, eof6, eof7, eof8 = PC_vals[indx, :]
     
-            # Biweekly mode
-            x = eof1; y = eof2
-            # Weekly mode
-            #x = eof3; y = eof4
+            if mode == 'biweekly':
+                x = eof1; y = eof2
+            elif mode == 'weekly':
+                x = eof3; y = eof4
+            else:
+                print('Error: Unknown mode.')
+                return
 
             amp = np.sqrt(x**2 + y**2)
             angle = get_angle_deg(x, y)
@@ -129,50 +133,52 @@ print('Number of genesis points in BoB, JJAS: {}'.format(len(gen_pts)))
 #print('Number of genesis points after stratification: {}'.format(int(np.sum(strong[:4]))))
 
 #data = stratify_data(amp_min=1.0, amp_max=np.Inf, phases=[1,2,3,4])
-#print('Number of genesis points after stratification: {}'.format(len(data)))
+data = stratify_data(amp_min=1.0, amp_max=np.Inf, phases=[2,3,4,5], mode='weekly')
+print('Number of genesis points after stratification: {}'.format(len(data)))
 #np.savez('BoB_gen_pts_JJAS_strat_biweekly_strong_p1234.npz', data)
+np.savez('BoB_gen_pts_JJAS_strat_weekly_strong_p2345.npz', data)
 
-strong = np.zeros((8))
-weak   = np.zeros((8))
-for i in range(PC_vals.shape[0]):
-    eof1, eof2, eof3, eof4, eof5, eof6, eof7, eof8 = PC_vals[i, :]
-
-    # Biweekly mode
-    x = eof1; y = eof2
-    # Weekly mode
-    #x = eof3; y = eof4
-
-    amp = np.sqrt(x**2 + y**2)
-    angle = get_angle_deg(x, y)
-
-    if amp > 1:
-        strong[get_phase(angle) - 1] += 1
-    else:
-        weak[get_phase(angle) - 1] += 1
-        
-
-#################################################################################
-f = plt.figure(figsize=(8,5))
-ax = plt.subplot(111)
-
-#ax.set_title('Density of MD Genesis w.r.t. Biweekly EOFs', size=16)
-#ax.set_title('Density of MD Genesis w.r.t. Weekly EOFs', size=16)
-ax.set_title('Biweekly EOFs Count', size=16)
-#ax.set_title('Weekly EOFs Count', size=16)
-ax.set_xlabel('Phase', size=12)
-#ax.set_ylabel('# of MD Genesis Points', size=12)
-ax.set_ylabel('# of Events', size=12)
-
-centers = np.arange(1, 9)
-width = 0.45
-ax.bar(centers - width/2, strong, width=width, color='#aa7777', hatch='', edgecolor='k', label='strong phase')
-ax.bar(centers + width/2, weak,   width=width, color='#7777aa', hatch='', edgecolor='k', label='weak phase')
-ax.legend()
-
-plt.show()
-
-#f.savefig('biweekly_stratified.png', dpi=100)
-#f.savefig('weekly_stratified.png', dpi=100)
-f.savefig('biweekly_all.png', dpi=100)
-#f.savefig('weekly_all.png', dpi=100)
-#################################################################################
+#strong = np.zeros((8))
+#weak   = np.zeros((8))
+#for i in range(PC_vals.shape[0]):
+#    eof1, eof2, eof3, eof4, eof5, eof6, eof7, eof8 = PC_vals[i, :]
+#
+#    # Biweekly mode
+#    x = eof1; y = eof2
+#    # Weekly mode
+#    #x = eof3; y = eof4
+#
+#    amp = np.sqrt(x**2 + y**2)
+#    angle = get_angle_deg(x, y)
+#
+#    if amp > 1:
+#        strong[get_phase(angle) - 1] += 1
+#    else:
+#        weak[get_phase(angle) - 1] += 1
+#        
+#
+##################################################################################
+#f = plt.figure(figsize=(8,5))
+#ax = plt.subplot(111)
+#
+##ax.set_title('Density of MD Genesis w.r.t. Biweekly EOFs', size=16)
+##ax.set_title('Density of MD Genesis w.r.t. Weekly EOFs', size=16)
+#ax.set_title('Biweekly EOFs Count', size=16)
+##ax.set_title('Weekly EOFs Count', size=16)
+#ax.set_xlabel('Phase', size=12)
+##ax.set_ylabel('# of MD Genesis Points', size=12)
+#ax.set_ylabel('# of Events', size=12)
+#
+#centers = np.arange(1, 9)
+#width = 0.45
+#ax.bar(centers - width/2, strong, width=width, color='#aa7777', hatch='', edgecolor='k', label='strong phase')
+#ax.bar(centers + width/2, weak,   width=width, color='#7777aa', hatch='', edgecolor='k', label='weak phase')
+#ax.legend()
+#
+#plt.show()
+#
+##f.savefig('biweekly_stratified.png', dpi=100)
+##f.savefig('weekly_stratified.png', dpi=100)
+#f.savefig('biweekly_all.png', dpi=100)
+##f.savefig('weekly_all.png', dpi=100)
+##################################################################################
