@@ -32,7 +32,7 @@ print('Creating composites: printing to latest out file in {}.\n'.format(os.getc
 
 # Load genesis point data
 print('Loading genesis point data...')
-genesis_trx = np.load(track_dir + 'BoB_gen_pts_JJAS_strat_biweekly_strong_p1234.npz')
+genesis_trx = np.load(track_dir + 'BoB_gen_pts_JJAS_strat_weekly_strong_p2345.npz')
 genesis_trx = genesis_trx['arr_0']
 
 #256 lat, 512 lon
@@ -57,9 +57,9 @@ sc:
     CIWC_GDS4_ISBL
     CC_GDS4_ISBL
 '''
-variable      = 'U_GDS4_ISBL'
-variable_name = 'U'
-grb_name      = 'U component of wind'
+variable      = 'V_GDS4_ISBL'
+variable_name = 'V'
+grb_name      = 'V component of wind'
 if variable in ['U_GDS4_ISBL', 'V_GDS4_ISBL']:
     data_type = 'uv'
 else:
@@ -160,7 +160,7 @@ for i in range(len(lags)):
                 coords=[levels, lats, lons], 
                 dims=['lvl', 'lat', 'lon'])
     # Save for plotting
-    fname = '{}composite_n{}_{}_JJAS_strat_harm_lag{}.nc'.format(composite_dir, N, variable_name, lags[i])
+    fname = '{}composite_n{}_{}_JJAS_weekly2345s_harm_lag{}.nc'.format(composite_dir, N, variable_name, lags[i])
     comp_da.to_netcdf(fname)
     print('Data saved in {}.'.format(fname))
 
@@ -172,7 +172,7 @@ for i in range(len(lags)):
                 dims=['lvl', 'lat', 'lon'])
 
     # Save for plotting
-    fname = '{}composite_n{}_{}_JJAS_strat_harm_ttest_lag{}.nc'.format(composite_dir, N, variable_name, lags[i])
+    fname = '{}composite_n{}_{}_JJAS_weekly2345s_harm_ttest_lag{}.nc'.format(composite_dir, N, variable_name, lags[i])
     comp_da.to_netcdf(fname)
     print('Data saved in {}.'.format(fname))
 
