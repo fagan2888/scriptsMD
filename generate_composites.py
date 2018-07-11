@@ -57,9 +57,9 @@ sc:
     CIWC_GDS4_ISBL
     CC_GDS4_ISBL
 '''
-variable      = 'V_GDS4_ISBL'
-variable_name = 'V'
-grb_name      = 'V component of wind'
+variable      = 'U_GDS4_ISBL'
+variable_name = 'U'
+grb_name      = 'U component of wind'
 if variable in ['U_GDS4_ISBL', 'V_GDS4_ISBL']:
     data_type = 'uv'
 else:
@@ -160,8 +160,7 @@ for i in range(len(lags)):
                 coords=[levels, lats, lons], 
                 dims=['lvl', 'lat', 'lon'])
     # Save for plotting
-    #fname = '{}composite_n{}_{}_JJAS_strat_harm_lag{}.nc'.format(composite_dir, N, variable_name, lags[i])
-    fname = composite_dir + 'grb_lag' + str(lags[i]) + '.nc'
+    fname = '{}composite_n{}_{}_JJAS_strat_harm_lag{}.nc'.format(composite_dir, N, variable_name, lags[i])
     comp_da.to_netcdf(fname)
     print('Data saved in {}.'.format(fname))
 
@@ -173,8 +172,7 @@ for i in range(len(lags)):
                 dims=['lvl', 'lat', 'lon'])
 
     # Save for plotting
-    #fname = '{}composite_n{}_{}_JJAS_strat_harm_ttest_lag{}.nc'.format(composite_dir, N, variable_name, lags[i])
-    fname = composite_dir + 'grb_ttest_lag' + str(lags[i]) + '.nc'
+    fname = '{}composite_n{}_{}_JJAS_strat_harm_ttest_lag{}.nc'.format(composite_dir, N, variable_name, lags[i])
     comp_da.to_netcdf(fname)
     print('Data saved in {}.'.format(fname))
 

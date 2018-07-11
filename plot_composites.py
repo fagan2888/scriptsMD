@@ -239,29 +239,6 @@ idir = '/global/scratch/hpeter/composites/'
 
 #plot1dx('composite_n150_Vanom_JJAS_lag0.nc')
 
-#plot2dxy_lag('composite_n150_Vanom_JJAS_lag', lags=lags0, ttest=True, lvl=850)
-#plot2dxy_lag('composite_n150_Vanom_JJAS_lag', lags=lags02, ttest=True, lvl=300)
-#plot2dxy_lag('composite_n150_Uanom_JJAS_lag', lags=lags02, ttest=True, lvl=850)
-#plot2dxy_lag('composite_n150_Uanom_JJAS_lag', lags=lags02, ttest=True, lvl=300)
-
-#plot2dxy_lag_vector('composite_n150_Uanom_JJAS_lag', 'composite_n150_Vanom_JJAS_lag', 
-#    title='Significant Anomalous Wind (850 mb, n = 150)', lags=lags012, ttest=True, lvl=850)
-#plot2dxy_lag_vector('composite_n150_Uanom_JJAS_lag', 'composite_n150_Vanom_JJAS_lag', 
-#    title='Significant Anomalous Wind (300 mb, n = 150)', lags=lags012, ttest=True, lvl=300)
-#
-#plot2dxz_lag('composite_n150_Vanom_JJAS_lag', 
-#    title='Anomalous V (n = 150, genesis latitude)', lags=lags012, ttest=False)
-#plot2dxz_lag('composite_n150_Vanom_JJAS_lag', 
-#    title='Significant Anomalous V (n = 150, genesis latitude)', lags=lags012, ttest=True)
-
-#plot2dxy_lag_vector('composite_n150_Uanom_JJAS_lag', 'composite_n150_Vanom_JJAS_lag', 
-#    title='Significant Anomalous Wind (850 mb, n = 150)', lags=lags0, ttest=True, lvl=850)
-#plot2dxy_lag_vector('composite_n150_Uanom_JJAS_lag', 'composite_n150_Vanom_JJAS_lag', 
-#    title='Significant Anomalous Wind (300 mb, n = 150)', lags=lags0, ttest=True, lvl=300)
-
-#plot2dxy_lag('composite_n150_U_JJAS_lag', lags=lags012, ttest=True, lvl=850)
-#plot2dxy_lag('composite_n150_U_JJAS_lag', lags=lags012, ttest=True, lvl=300)
-
 #plot2dxy_lag('composite_n150_V_JJAS_strat_harm_ttest_lag', lags=lags012, lvl=850)
 #plot2dxy_lag('composite_n150_V_JJAS_strat_harm_ttest_lag', lags=lags012, lvl=300)
 
