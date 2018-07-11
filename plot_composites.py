@@ -172,9 +172,8 @@ def plot2dxy_lag_vector(ufilenames, vfilenames, ufilenames_ttest=None, vfilename
             ax.set_title('lag ${}$'.format(lag))
     plt.tight_layout(pad=3, w_pad=-4)
     #plt.tight_layout(pad=3, w_pad=-3)
-    fname = '../images/winds' + str(lvl) + '_stratified.png'
-    #fname = '../images/winds' + str(lvl) + '_harmonics_zoomed.png'
-    #plt.savefig(fname, dpi=150)
+    fname = '/global/home/users/hpeter/images/winds' + str(lvl) + '_biweekly1234s.png'
+    plt.savefig(fname, dpi=100)
 
 def plot2dxz_lag(filenames, title='Default lags, ttest', lags=[-2,-1,0,1,2], ttest=True):
     # setup
@@ -229,7 +228,7 @@ def plot2dxz_lag(filenames, title='Default lags, ttest', lags=[-2,-1,0,1,2], tte
             ax.set_title('lag {}'.format(lag))
     plt.tight_layout(pad=1, w_pad=-5)
     fname = 'verticalV_ttest.png'
-    #plt.savefig(fname, dpi=150)
+    #plt.savefig(fname, dpi=100)
 
 lags0 = [0]
 lags02 = [-2, 0, 2]
@@ -242,47 +241,47 @@ idir = '/global/scratch/hpeter/composites/'
 #plot2dxy_lag('composite_n150_V_JJAS_strat_harm_ttest_lag', lags=lags012, lvl=850)
 #plot2dxy_lag('composite_n150_V_JJAS_strat_harm_ttest_lag', lags=lags012, lvl=300)
 
-#plot2dxy_lag_vector('composite_n150_U_JJAS_biweekly1234s_harm_lag', 
-#                    'composite_n150_V_JJAS_biweekly1234s_harm_lag', 
-#                    'composite_n150_U_JJAS_biweekly1234s_harm_ttest_lag',
-#                    'composite_n150_V_JJAS_biweekly1234s_harm_ttest_lag',
-#                    title='Significant Anomalous Wind (850 mb, n = 150)', 
-#                    lags=lags012, 
-#                    lvl=850)
-#plot2dxy_lag_vector('composite_n150_U_JJAS_biweekly1234s_harm_lag', 
-#                    'composite_n150_V_JJAS_biweekly1234s_harm_lag', 
-#                    'composite_n150_U_JJAS_biweekly1234s_harm_ttest_lag',
-#                    'composite_n150_V_JJAS_biweekly1234s_harm_ttest_lag',
-#                    title='Significant Anomalous Wind (500 mb, n = 150)', 
-#                    lags=lags012, 
-#                    lvl=500)
-#plot2dxy_lag_vector('composite_n150_U_JJAS_biweekly1234s_harm_lag', 
-#                    'composite_n150_V_JJAS_biweekly1234s_harm_lag', 
-#                    'composite_n150_U_JJAS_biweekly1234s_harm_ttest_lag',
-#                    'composite_n150_V_JJAS_biweekly1234s_harm_ttest_lag',
-#                    title='Significant Anomalous Wind (300 mb, n = 150)', 
-#                    lags=lags012, 
-#                    lvl=300)
-plot2dxy_lag_vector('composite_n150_U_JJAS_weekly2345s_harm_lag', 
-                    'composite_n150_V_JJAS_weekly2345s_harm_lag', 
-                    'composite_n150_U_JJAS_weekly2345s_harm_ttest_lag',
-                    'composite_n150_V_JJAS_weekly2345s_harm_ttest_lag',
-                    title='Significant Anomalous Wind (850 mb, n = 150)', 
+plot2dxy_lag_vector('composite_n150_U_JJAS_biweekly1234s_harm_lag', 
+                    'composite_n150_V_JJAS_biweekly1234s_harm_lag', 
+                    'composite_n150_U_JJAS_biweekly1234s_harm_ttest_lag',
+                    'composite_n150_V_JJAS_biweekly1234s_harm_ttest_lag',
+                    title='Significant Anomalous Wind\n(850 mb, n = 150, strong biweekly mode phases 1-4)', 
                     lags=lags012, 
                     lvl=850)
-plot2dxy_lag_vector('composite_n150_U_JJAS_weekly2345s_harm_lag', 
-                    'composite_n150_V_JJAS_weekly2345s_harm_lag', 
-                    'composite_n150_U_JJAS_weekly2345s_harm_ttest_lag',
-                    'composite_n150_V_JJAS_weekly2345s_harm_ttest_lag',
-                    title='Significant Anomalous Wind (500 mb, n = 150)', 
+plot2dxy_lag_vector('composite_n150_U_JJAS_biweekly1234s_harm_lag', 
+                    'composite_n150_V_JJAS_biweekly1234s_harm_lag', 
+                    'composite_n150_U_JJAS_biweekly1234s_harm_ttest_lag',
+                    'composite_n150_V_JJAS_biweekly1234s_harm_ttest_lag',
+                    title='Significant Anomalous Wind\n(500 mb, n = 150, strong biweekly mode phases 1-4)', 
                     lags=lags012, 
                     lvl=500)
-plot2dxy_lag_vector('composite_n150_U_JJAS_weekly2345s_harm_lag', 
-                    'composite_n150_V_JJAS_weekly2345s_harm_lag', 
-                    'composite_n150_U_JJAS_weekly2345s_harm_ttest_lag',
-                    'composite_n150_V_JJAS_weekly2345s_harm_ttest_lag',
-                    title='Significant Anomalous Wind (300 mb, n = 150)', 
+plot2dxy_lag_vector('composite_n150_U_JJAS_biweekly1234s_harm_lag', 
+                    'composite_n150_V_JJAS_biweekly1234s_harm_lag', 
+                    'composite_n150_U_JJAS_biweekly1234s_harm_ttest_lag',
+                    'composite_n150_V_JJAS_biweekly1234s_harm_ttest_lag',
+                    title='Significant Anomalous Wind\n(300 mb, n = 150, strong biweekly mode phases 1-4)', 
                     lags=lags012, 
                     lvl=300)
+#plot2dxy_lag_vector('composite_n150_U_JJAS_weekly2345s_harm_lag', 
+#                    'composite_n150_V_JJAS_weekly2345s_harm_lag', 
+#                    'composite_n150_U_JJAS_weekly2345s_harm_ttest_lag',
+#                    'composite_n150_V_JJAS_weekly2345s_harm_ttest_lag',
+#                    title='Significant Anomalous Wind\n(850 mb, n = 150, strong weekly mode phases 2-5)', 
+#                    lags=lags012, 
+#                    lvl=850)
+#plot2dxy_lag_vector('composite_n150_U_JJAS_weekly2345s_harm_lag', 
+#                    'composite_n150_V_JJAS_weekly2345s_harm_lag', 
+#                    'composite_n150_U_JJAS_weekly2345s_harm_ttest_lag',
+#                    'composite_n150_V_JJAS_weekly2345s_harm_ttest_lag',
+#                    title='Significant Anomalous Wind\n(500 mb, n = 150, strong weekly mode phases 2-5)', 
+#                    lags=lags012, 
+#                    lvl=500)
+#plot2dxy_lag_vector('composite_n150_U_JJAS_weekly2345s_harm_lag', 
+#                    'composite_n150_V_JJAS_weekly2345s_harm_lag', 
+#                    'composite_n150_U_JJAS_weekly2345s_harm_ttest_lag',
+#                    'composite_n150_V_JJAS_weekly2345s_harm_ttest_lag',
+#                    title='Significant Anomalous Wind\n(300 mb, n = 150, strong weekly mode phases 2-5)', 
+#                    lags=lags012, 
+#                    lvl=300)
 
 plt.show()
