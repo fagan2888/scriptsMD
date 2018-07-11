@@ -48,26 +48,29 @@ def stratify_data(amp_min, amp_max, phases, mode):
     for i in range(len(gen_pts)):
         lon, lat, year, month, day, hour, intensity = gen_pts[i, :]
     
-        for hour in [0, 12]: 
+        if int(hour) in [6, 18]:
+            # average the PC vals if not on 0 or 12
+            hour = 0
             indx = np.where( np.logical_and( np.logical_and( np.logical_and( PC_dates[:, 0] == int(year), PC_dates[:, 1] == int(month)), PC_dates[:, 2] == int(day)), PC_dates[:, 3] == int(hour)) )[0][0]
-
+            eof1, eof2, eof3, eof4, eof5, eof6, eof7, eof8 = ( PC_vals[indx, :] + PC_vals[indx, :]) / 2
+        else:
+            indx = np.where( np.logical_and( np.logical_and( np.logical_and( PC_dates[:, 0] == int(year), PC_dates[:, 1] == int(month)), PC_dates[:, 2] == int(day)), PC_dates[:, 3] == int(hour)) )[0][0]
             eof1, eof2, eof3, eof4, eof5, eof6, eof7, eof8 = PC_vals[indx, :]
     
-            if mode == 'biweekly':
-                x = eof1; y = eof2
-            elif mode == 'weekly':
-                x = eof3; y = eof4
-            else:
-                print('Error: Unknown mode.')
-                return
+        if mode == 'biweekly':
+            x = eof1; y = eof2
+        elif mode == 'weekly':
+            x = eof3; y = eof4
+        else:
+            print('Error: Unknown mode.')
+            return
 
-            amp = np.sqrt(x**2 + y**2)
-            angle = get_angle_deg(x, y)
+        amp = np.sqrt(x**2 + y**2)
+        angle = get_angle_deg(x, y)
     
-            if amp <= amp_max and amp >= amp_min:
-                if get_phase(angle) in phases: 
-                    strat_indexes[i] = True
-                    break
+        if amp <= amp_max and amp >= amp_min:
+            if get_phase(angle) in phases: 
+                strat_indexes[i] = True
 
     data = gen_pts[strat_indexes, :]
     return data
@@ -116,69 +119,70 @@ gen_pts = gen_pts[np.where(np.logical_and(gen_pts[:,3] >= m1, gen_pts[:,3] <= m2
 print('Number of genesis points in BoB, JJAS: {}'.format(len(gen_pts)))
 
 # Stratify
-#strong = np.zeros((8))
-#weak   = np.zeros((8))
-#for phase in range(1, 9):
-#    # strong
-#    data = stratify_data(amp_min=1.0, amp_max=np.Inf, phases=[phase])
-#    n = data.shape[0]
-#    strong[phase-1] = n
-#    print('amp_min={}, amp_max={}, phase={}: {}'.format(1.0, np.Inf, phase, n))
-#
-#    ## weak
-#    #data = stratify_data(amp_min=0.0, amp_max=1.0, phases=[phase])
-#    #n = data.shape[0]
-#    #weak[phase-1] = n
-#    #print('amp_min={}, amp_max={}, phase={}: {}'.format(0.0, 1.0, phase, n))
-#print('Number of genesis points after stratification: {}'.format(int(np.sum(strong[:4]))))
+##data = stratify_data(amp_min=1.0, amp_max=np.Inf, phases=[1,2,3,4])
+#data = stratify_data(amp_min=1.0, amp_max=np.Inf, phases=[2,3,4,5], mode='weekly')
+#print('Number of genesis points after stratification: {}'.format(len(data)))
+##np.savez('BoB_gen_pts_JJAS_strat_biweekly_strong_p1234.npz', data)
+#np.savez('BoB_gen_pts_JJAS_strat_weekly_strong_p2345.npz', data)
 
-#data = stratify_data(amp_min=1.0, amp_max=np.Inf, phases=[1,2,3,4])
-data = stratify_data(amp_min=1.0, amp_max=np.Inf, phases=[2,3,4,5], mode='weekly')
-print('Number of genesis points after stratification: {}'.format(len(data)))
-#np.savez('BoB_gen_pts_JJAS_strat_biweekly_strong_p1234.npz', data)
-np.savez('BoB_gen_pts_JJAS_strat_weekly_strong_p2345.npz', data)
+mode = 'biweekly'
+strong = np.zeros((8))
+weak   = np.zeros((8))
+for phase in range(1, 9):
+    # strong
+    data = stratify_data(amp_min=1.0, amp_max=np.Inf, phases=[phase], mode=mode)
+    n = data.shape[0]
+    strong[phase-1] = n
+    print('amp_min={}, amp_max={}, phase={}: {}'.format(1.0, np.Inf, phase, n))
 
-#strong = np.zeros((8))
-#weak   = np.zeros((8))
-#for i in range(PC_vals.shape[0]):
-#    eof1, eof2, eof3, eof4, eof5, eof6, eof7, eof8 = PC_vals[i, :]
-#
-#    # Biweekly mode
-#    x = eof1; y = eof2
-#    # Weekly mode
-#    #x = eof3; y = eof4
-#
-#    amp = np.sqrt(x**2 + y**2)
-#    angle = get_angle_deg(x, y)
-#
-#    if amp > 1:
-#        strong[get_phase(angle) - 1] += 1
-#    else:
-#        weak[get_phase(angle) - 1] += 1
-#        
-#
-##################################################################################
-#f = plt.figure(figsize=(8,5))
-#ax = plt.subplot(111)
-#
-##ax.set_title('Density of MD Genesis w.r.t. Biweekly EOFs', size=16)
-##ax.set_title('Density of MD Genesis w.r.t. Weekly EOFs', size=16)
-#ax.set_title('Biweekly EOFs Count', size=16)
-##ax.set_title('Weekly EOFs Count', size=16)
-#ax.set_xlabel('Phase', size=12)
-##ax.set_ylabel('# of MD Genesis Points', size=12)
+    # weak
+    data = stratify_data(amp_min=0.0, amp_max=1.0, phases=[phase], mode=mode)
+    n = data.shape[0]
+    weak[phase-1] = n
+    print('amp_min={}, amp_max={}, phase={}: {}'.format(0.0, 1.0, phase, n))
+print('{} strong + {} weak = {} total'.format(np.sum(strong), np.sum(weak), np.sum(strong) + np.sum(weak)))
+print('Number of genesis points after stratification: {}'.format(int(np.sum(strong[:4]))))
+
+strong_all = np.zeros((8))
+weak_all   = np.zeros((8))
+for i in range(PC_vals.shape[0]):
+    eof1, eof2, eof3, eof4, eof5, eof6, eof7, eof8 = PC_vals[i, :]
+
+    if mode == 'biweekly':
+        x = eof1; y = eof2
+    elif mode == 'weekly':
+        x = eof3; y = eof4
+
+    amp = np.sqrt(x**2 + y**2)
+    angle = get_angle_deg(x, y)
+
+    if amp > 1:
+        strong_all[get_phase(angle) - 1] += 1
+    else:
+        weak_all[get_phase(angle) - 1] += 1
+        
+strong /= strong_all
+weak /= weak_all
+
+################################################################################
+f = plt.figure(figsize=(8,5))
+ax = plt.subplot(111)
+
+ax.set_title('Distribution of MD Genesis w.r.t. {} EOFs'.format(mode.capitalize()), size=16)
+#ax.set_title('{} EOFs Count'.format(mode.capitalize()), size=16)
+ax.set_xlabel('Phase', size=12)
+ax.set_ylabel('# Genesis Points / # Total Points in Phase', size=12)
 #ax.set_ylabel('# of Events', size=12)
-#
-#centers = np.arange(1, 9)
-#width = 0.45
-#ax.bar(centers - width/2, strong, width=width, color='#aa7777', hatch='', edgecolor='k', label='strong phase')
-#ax.bar(centers + width/2, weak,   width=width, color='#7777aa', hatch='', edgecolor='k', label='weak phase')
-#ax.legend()
-#
-#plt.show()
-#
-##f.savefig('biweekly_stratified.png', dpi=100)
-##f.savefig('weekly_stratified.png', dpi=100)
-#f.savefig('biweekly_all.png', dpi=100)
-##f.savefig('weekly_all.png', dpi=100)
-##################################################################################
+
+centers = np.arange(1, 9)
+width = 0.45
+ax.bar(centers - width/2, strong, width=width, color='#aa7777', hatch='', edgecolor='k', label='strong phase')
+ax.bar(centers + width/2, weak,   width=width, color='#7777aa', hatch='', edgecolor='k', label='weak phase')
+ax.legend()
+
+plt.show()
+
+#f.savefig(mode + '_stratified.png', dpi=100)
+f.savefig(mode + '_stratified_normalized.png', dpi=100)
+#f.savefig(mode + '_all.png', dpi=100)
+#################################################################################
