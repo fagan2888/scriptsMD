@@ -8,6 +8,7 @@
 import numpy as np
 import pandas as pd
 import xarray as xr
+import pygrib
 from scipy.stats import ttest_1samp
 import datetime as dt
 import os
@@ -57,6 +58,7 @@ sc:
 '''
 variable      = 'V_GDS4_ISBL'
 variable_name = 'V'
+grb_name      = 'V component of wind'
 if variable in ['U_GDS4_ISBL', 'V_GDS4_ISBL']:
     data_type = 'uv'
 else:
@@ -72,14 +74,17 @@ lags = [-2, -1, 0, 1, 2]
 
 print('Gathering ERA data now.')
 
-# Get Harmonics data to use for calculating anomaly
-harms = {}
-harms['850'] = np.load('{}ei.oper.an.pl.regn128uv.{}_{}mb_all_years_harmonics.npz'.format(harm_dir, variable_name, 850))['arr_0']
-harms['500'] = np.load('{}ei.oper.an.pl.regn128uv.{}_{}mb_all_years_harmonics.npz'.format(harm_dir, variable_name, 500))['arr_0']
-harms['300'] = np.load('{}ei.oper.an.pl.regn128uv.{}_{}mb_all_years_harmonics.npz'.format(harm_dir, variable_name, 300))['arr_0']
+# Pressure levels
+levels = [850, 500, 300]
 
 # Put all the data in a giant array for processing
-data_total = np.zeros( (len(lags), N, len(harms.keys()), 256, 512) )
+data_total = np.zeros( (len(lags), N, len(levels), 256, 512) )
+
+# Get Harmonics data to use for calculating anomaly
+harms = {}
+for l in levels:
+    harms[str(l)] = np.load('{}ei.oper.an.pl.regn128uv.{}_{}mb_all_years_harmonics.npz'.format(harm_dir, variable_name, l))['arr_0']
+
 
 # Begin looping through genesis points
 while i < L and n < N:
@@ -104,36 +109,27 @@ while i < L and n < N:
         ifile = idir + ifile_name
 
         # Convert to netCDF if haven't before
-        if os.path.isfile(data_dir + ifile_name + '.nc'):
-            print('{} exists.'.format(ifile_name+'.nc'))
-        else:
-            print('Converting .grb to .nc')
-            os.system('ncl_convert2nc {}.grb'.format(ifile))
-            os.system('mv {}.nc {}'.format(ifile_name, data_dir))
+        print('Reading {}'.format(ifile))
 
         # Read the ERA data and pick the variable we want
-        ds = xr.open_dataset(data_dir + ifile_name + '.nc')
-        # becomes data array:
-        genpt_da = ds[variable]
-        genpt_da = genpt_da.sel(lv_ISBL0=[850, 500, 300])
-
-        if n == 0:
-            # Create an unshifted copy for later
-            comp_da = genpt_da
+        grbs = pygrib.open(ifile)
+        grb = grbs.select(name=grb_name, level=levels)
+        # Transfer data to an array
+        genpt_data = np.zeros( (len(levels), 256, 512) )
+        for i in range(len(levels)):
+            genpt_data[i, :, :] = grb[i].values
 
         # Find mean from this day and subtract it
         index = nDataPts + 4 * lags[j] - 1
-
-        genpt_da.values = [genpt_da.sel(lv_ISBL0=850).values - harms['850'][index, :, :],
-                           genpt_da.sel(lv_ISBL0=500).values - harms['500'][index, :, :],
-                           genpt_da.sel(lv_ISBL0=300).values - harms['300'][index, :, :]]
+        for i in range(len(levels)):
+            genpt_data[i, :, :] -= harms[str(levels[i])][index, :, :]
 
         # Shift to have genesis (lon, lat) at (180, 0)
-        genpt_da = genpt_da.roll(g4_lat_1=128-int((90-lat)/dx)) # move lat to 90, then add 128 (256/2) to put at 0
-        genpt_da = genpt_da.roll(g4_lon_2=256-int(lon/dx))      # move lon to 0, then add 256 (512/2) to put at 180
+        genpt_data = np.roll(genpt_data, 128-int((90-lat)/dx), axis=1) # move lat to 90, then add 128 (256/2) to put at 0
+        genpt_data = np.roll(genpt_data, 256-int(lon/dx), axis=2)      # move lon to 0, then add 256 (512/2) to put at 180
 
         # Add ERA data at this genesis point to full data array
-        data_total[j, n, :, :, :] = genpt_da.values[:, :, :]
+        data_total[j, n, :, :, :] = genpt_data[:, :, :]
 
         print('Lag {} complete.'.format(lag))
 
@@ -146,6 +142,10 @@ while i < L and n < N:
 
 print('Done. Processing data...')
 
+# Get Lats/Lons from last grib
+lats, lons = grb[0].latlons()
+lats = lats[:, 0]
+lons = lons[0, :]
 
 # t test -- null hypothesis that (data - daily mean) not different from 0.0
 # going along axis 1 (the N gen pts) thus outputs prob array of size (lags, z, y, x)
@@ -154,20 +154,25 @@ t, prob = ttest_1samp(data_total, popmean=0.0, axis=1)
 # First save raw data
 data_total_composite = np.mean(data_total, axis=1)
 for i in range(len(lags)):
-    comp_da.values[:, :, :] = data_total_composite[i, :, :, :]
-
+    comp_da = xr.DataArray(data_total_composite[i, :, :, :], 
+                coords=[levels, lats, lons], 
+                dims=['lvl', 'lat', 'lon'])
     # Save for plotting
-    fname = '{}composite_n{}_{}_JJAS_strat_harm_lag{}.nc'.format(composite_dir, N, variable_name, lags[i])
+    #fname = '{}composite_n{}_{}_JJAS_strat_harm_lag{}.nc'.format(composite_dir, N, variable_name, lags[i])
+    fname = composite_dir + 'grb_lag' + str(lags[i]) + '.nc'
     comp_da.to_netcdf(fname)
     print('Data saved in {}.'.format(fname))
 
 # Now save ttest data: Zero out insignificant data points
 data_total_composite[np.where(prob > 0.05)] = 0.0
 for i in range(len(lags)):
-    comp_da.values[:, :, :] = data_total_composite[i, :, :, :]
+    comp_da = xr.DataArray(data_total_composite[i, :, :, :], 
+                coords=[levels, lats, lons], 
+                dims=['lvl', 'lat', 'lon'])
 
     # Save for plotting
-    fname = '{}composite_n{}_{}_JJAS_strat_harm_ttest_lag{}.nc'.format(composite_dir, N, variable_name, lags[i])
+    #fname = '{}composite_n{}_{}_JJAS_strat_harm_ttest_lag{}.nc'.format(composite_dir, N, variable_name, lags[i])
+    fname = composite_dir + 'grb_ttest_lag' + str(lags[i]) + '.nc'
     comp_da.to_netcdf(fname)
     print('Data saved in {}.'.format(fname))
 

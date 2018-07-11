@@ -60,8 +60,8 @@ def plot2dxy_lag(filenames, lags=[-2,-1,0,1,2], lvl=850):
 
         # data
         da = xr.open_dataarray(filenames_full+str(lag)+'.nc')
-        comp = da.sel({'lv_ISBL0' : lvl}, method='nearest').sel(
-            {'g4_lat_1' : slice(tlat, blat), 'g4_lon_2' : slice(llon, rlon)}).values
+        comp = da.sel({'lvl' : lvl}, method='nearest').sel(
+            {'lat' : slice(tlat, blat), 'lon' : slice(llon, rlon)}).values
         cmap = plt.get_cmap('PiYG')
         avg = np.mean(np.abs(comp))
         sd = np.std(np.abs(comp))
@@ -174,7 +174,7 @@ def plot2dxy_lag_vector(ufilenames, vfilenames, ufilenames_ttest=None, vfilename
     #plt.tight_layout(pad=3, w_pad=-3)
     fname = '../images/winds' + str(lvl) + '_stratified.png'
     #fname = '../images/winds' + str(lvl) + '_harmonics_zoomed.png'
-    plt.savefig(fname, dpi=300)
+    #plt.savefig(fname, dpi=150)
 
 def plot2dxz_lag(filenames, title='Default lags, ttest', lags=[-2,-1,0,1,2], ttest=True):
     # setup
@@ -229,7 +229,7 @@ def plot2dxz_lag(filenames, title='Default lags, ttest', lags=[-2,-1,0,1,2], tte
             ax.set_title('lag {}'.format(lag))
     plt.tight_layout(pad=1, w_pad=-5)
     fname = 'verticalV_ttest.png'
-    #plt.savefig(fname, dpi=300)
+    #plt.savefig(fname, dpi=150)
 
 lags0 = [0]
 lags02 = [-2, 0, 2]
@@ -265,19 +265,30 @@ idir = '/global/scratch/hpeter/composites/'
 #plot2dxy_lag('composite_n150_V_JJAS_strat_harm_ttest_lag', lags=lags012, lvl=850)
 #plot2dxy_lag('composite_n150_V_JJAS_strat_harm_ttest_lag', lags=lags012, lvl=300)
 
-plot2dxy_lag_vector('composite_n150_U_JJAS_strat_harm_lag', 
-                    'composite_n150_V_JJAS_strat_harm_lag', 
-                    'composite_n150_U_JJAS_strat_harm_ttest_lag',
-                    'composite_n150_V_JJAS_strat_harm_ttest_lag',
-                    title='Significant Anomalous Wind (850 mb, n = 150)', 
-                    lags=lags012, 
-                    lvl=850)
-plot2dxy_lag_vector('composite_n150_U_JJAS_strat_harm_lag', 
-                    'composite_n150_V_JJAS_strat_harm_lag', 
-                    'composite_n150_U_JJAS_strat_harm_ttest_lag',
-                    'composite_n150_V_JJAS_strat_harm_ttest_lag',
-                    title='Significant Anomalous Wind (300 mb, n = 150)', 
-                    lags=lags012, 
-                    lvl=300)
+plot2dxy_lag('grb_lag', lags=lags012, lvl=850)
+plot2dxy_lag('grb_lag', lags=lags012, lvl=500)
+plot2dxy_lag('grb_lag', lags=lags012, lvl=300)
+
+#plot2dxy_lag_vector('composite_n150_U_JJAS_strat_harm_lag', 
+#                    'composite_n150_V_JJAS_strat_harm_lag', 
+#                    'composite_n150_U_JJAS_strat_harm_ttest_lag',
+#                    'composite_n150_V_JJAS_strat_harm_ttest_lag',
+#                    title='Significant Anomalous Wind (850 mb, n = 150)', 
+#                    lags=lags012, 
+#                    lvl=850)
+#plot2dxy_lag_vector('composite_n150_U_JJAS_strat_harm_lag', 
+#                    'composite_n150_V_JJAS_strat_harm_lag', 
+#                    'composite_n150_U_JJAS_strat_harm_ttest_lag',
+#                    'composite_n150_V_JJAS_strat_harm_ttest_lag',
+#                    title='Significant Anomalous Wind (500 mb, n = 150)', 
+#                    lags=lags012, 
+#                    lvl=500)
+#plot2dxy_lag_vector('composite_n150_U_JJAS_strat_harm_lag', 
+#                    'composite_n150_V_JJAS_strat_harm_lag', 
+#                    'composite_n150_U_JJAS_strat_harm_ttest_lag',
+#                    'composite_n150_V_JJAS_strat_harm_ttest_lag',
+#                    title='Significant Anomalous Wind (300 mb, n = 150)', 
+#                    lags=lags012, 
+#                    lvl=300)
 
 plt.show()

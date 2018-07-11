@@ -11,9 +11,10 @@ import xarray as xr
 import numpy as np
 from remove_harmonics import remove_harmonics
 
-idir = '/global/scratch/users/williamb/data/eraint/'
+#idir = '/global/scratch/users/williamb/data/eraint/'
+idir = '/global/scratch/users/hpeter/data/ERA_Interim/'
 odir = '/global/scratch/users/hpeter/data/ERA_Interim/'
-level = 300
+level = 500
 name = 'V'
 data_type = 'uv'
 #data_type = 'sc'
@@ -27,13 +28,15 @@ nLeap = 0
 nNotLeap = 0
 
 for year in range(1979, 2017):  # 2017 only has half a year, stop at 2016
+    print(year)
 
-    #ifile = '{}{}/ei.oper.an.pl.regn128sc.{}_{}mb_{}.nc'.format(odir, year, name, level, year)
-    #da = xr.open_dataarray(ifile)
+    ifile = '{}{}/ei.oper.an.pl.regn128{}.{}_{}mb_{}.nc'.format(odir, year, data_type, name, level, year)
+    da = xr.open_dataarray(ifile)
     
-    ifile = '{}/ei.oper.an.pl.regn128uv.{}mb{}.nc'.format(idir, level, year)
-    ds = xr.open_dataset(ifile)
-    da = ds.u
+    #ifile = '{}/ei.oper.an.pl.regn128uv.{}mb{}.nc'.format(idir, level, year)
+    #ds = xr.open_dataset(ifile)
+    #da = ds.u
+    
 
     leap_yr = True
     try: 
