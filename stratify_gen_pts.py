@@ -47,26 +47,6 @@ def stratify_data(amp_min, amp_max, phases):
     for i in range(len(gen_pts)):
         lon, lat, year, month, day, hour, intensity = gen_pts[i, :]
     
-        #if int(hour) == 6:
-        #    hour = 0
-        #elif int(hour) == 18:
-        #    hour = 12
-    
-        #indx = np.where( np.logical_and( np.logical_and( np.logical_and( PC_dates[:, 0] == int(year), PC_dates[:, 1] == int(month)), PC_dates[:, 2] == int(day)), PC_dates[:, 3] == int(hour)) )[0][0]
-    
-        #eof1, eof2, eof3, eof4, eof5, eof6, eof7, eof8 = PC_vals[indx, :]
-    
-        ## Biweekly mode
-        #x = eof1; y = eof2
-        ## Weekly mode
-        ##x = eof3; y = eof4
-
-        #amp = np.sqrt(x**2 + y**2)
-        #angle = get_angle_deg(x, y)
-    
-        #if amp <= amp_max and amp >= amp_min:
-        #    if get_phase(angle) in phases: 
-        #        strat_indexes[i] = True
         for hour in [0, 12]: 
             indx = np.where( np.logical_and( np.logical_and( np.logical_and( PC_dates[:, 0] == int(year), PC_dates[:, 1] == int(month)), PC_dates[:, 2] == int(day)), PC_dates[:, 3] == int(hour)) )[0][0]
 
@@ -87,7 +67,6 @@ def stratify_data(amp_min, amp_max, phases):
     
     # Save data
     data = gen_pts[strat_indexes, :]
-    #np.savez('BoB_genesis_points_stratified.npz', data)
 
     return data
 
@@ -134,23 +113,26 @@ gen_pts = gen_pts[np.where(np.logical_and(gen_pts[:,3] >= m1, gen_pts[:,3] <= m2
 
 print('Number of genesis points in BoB, JJAS: {}'.format(len(gen_pts)))
 
-# Calculate phase and amplitude of PCs
-strong = np.zeros((8))
-weak   = np.zeros((8))
-for phase in range(1, 9):
-    # strong
-    data = stratify_data(amp_min=1.0, amp_max=np.Inf, phases=[phase])
-    n = data.shape[0]
-    strong[phase-1] = n
-    print('amp_min={}, amp_max={}, phase={}: {}'.format(1.0, np.Inf, phase, n))
+# Stratify
+#strong = np.zeros((8))
+#weak   = np.zeros((8))
+#for phase in range(1, 9):
+#    # strong
+#    data = stratify_data(amp_min=1.0, amp_max=np.Inf, phases=[phase])
+#    n = data.shape[0]
+#    strong[phase-1] = n
+#    print('amp_min={}, amp_max={}, phase={}: {}'.format(1.0, np.Inf, phase, n))
+#
+#    ## weak
+#    #data = stratify_data(amp_min=0.0, amp_max=1.0, phases=[phase])
+#    #n = data.shape[0]
+#    #weak[phase-1] = n
+#    #print('amp_min={}, amp_max={}, phase={}: {}'.format(0.0, 1.0, phase, n))
+#print('Number of genesis points after stratification: {}'.format(int(np.sum(strong[:4]))))
 
-    ## weak
-    #data = stratify_data(amp_min=0.0, amp_max=1.0, phases=[phase])
-    #n = data.shape[0]
-    #weak[phase-1] = n
-    #print('amp_min={}, amp_max={}, phase={}: {}'.format(0.0, 1.0, phase, n))
-print('Number of genesis points after stratification: {}'.format(int(np.sum(strong[:4]))))
-    
+data = stratify_data(amp_min=1.0, amp_max=np.Inf, phases=[1,2,3,4])
+print('Number of genesis points after stratification: {}'.format(len(data)))
+np.savez('BoB_gen_pts_JJAS_strat_biweekly_strong_p1234.npz', data)
 
 
 
