@@ -35,7 +35,7 @@ def remove_harmonics(timeseries, sampfreq, n):
         # Fit harmonics to each spatial column
         # least squares solving A*x = d with d = ith column of timeseries
         coeff, residuals, rank, s = np.linalg.lstsq(A, timeseries[:, i])
-        # A*coeff ~= d
+        # A*coeff ~ d
         dmean[:, i] = np.matmul(A, coeff)
     danom = timeseries - dmean
 
