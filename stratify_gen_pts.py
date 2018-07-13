@@ -105,11 +105,13 @@ PC_vals[:, 7] /= s7
 gen_pts = trx_NH[geninits_NH - 1, :]
 
 # Narrow lon
-llon = 75; rlon = 95
+#llon = 75; rlon = 95
+llon = 83; rlon = 93
 gen_pts = gen_pts[np.where(np.logical_and(gen_pts[:,0] >= llon, gen_pts[:,0] <= rlon))]
 
 # Narrow lat
-llat = 10; ulat = 27
+#llat = 10; ulat = 27
+llat = 16; ulat = 21
 gen_pts = gen_pts[np.where(np.logical_and(gen_pts[:,1] >= llat, gen_pts[:,1] <= ulat))]
 
 # Narrow time
@@ -133,56 +135,57 @@ print('Number of genesis points in BoB, JJAS: {}'.format(len(gen_pts)))
 
 #print('Number of genesis points after stratification: {}'.format(len(data)))
 
-mode = 'weekly'
-#strong = np.zeros((8))
-#weak   = np.zeros((8))
-#for phase in range(1, 9):
-#    # strong
-#    data = stratify_data(amp_min=1.0, amp_max=np.Inf, phases=[phase], mode=mode)
-#    n = data.shape[0]
-#    strong[phase-1] = n
-#    print('amp_min={}, amp_max={}, phase={}: {}'.format(1.0, np.Inf, phase, n))
+mode = 'biweekly'
+strong = np.zeros((8))
+weak   = np.zeros((8))
+for phase in range(1, 9):
+    # strong
+    data = stratify_data(amp_min=0.5, amp_max=np.Inf, phases=[phase], mode=mode)
+    n = data.shape[0]
+    strong[phase-1] = n
+    print('amp_min={}, amp_max={}, phase={}: {}'.format(1.0, np.Inf, phase, n))
+
+    # weak
+    data = stratify_data(amp_min=0.0, amp_max=0.5, phases=[phase], mode=mode)
+    n = data.shape[0]
+    weak[phase-1] = n
+    print('amp_min={}, amp_max={}, phase={}: {}'.format(0.0, 1.0, phase, n))
+print('{} strong + {} weak = {} total'.format(np.sum(strong), np.sum(weak), np.sum(strong) + np.sum(weak)))
+
+#PC_vals = PC_vals[np.where(np.logical_and(PC_dates[:, 1] >= m1, PC_dates[:, 1] <= m2))]
+#strong_all = np.zeros((8))
+#weak_all   = np.zeros((8))
+#for i in range(PC_vals.shape[0]):
+#    eof1, eof2, eof3, eof4, eof5, eof6, eof7, eof8 = PC_vals[i, :]
 #
-#    # weak
-#    data = stratify_data(amp_min=0.0, amp_max=1.0, phases=[phase], mode=mode)
-#    n = data.shape[0]
-#    weak[phase-1] = n
-#    print('amp_min={}, amp_max={}, phase={}: {}'.format(0.0, 1.0, phase, n))
-#print('{} strong + {} weak = {} total'.format(np.sum(strong), np.sum(weak), np.sum(strong) + np.sum(weak)))
-
-strong_all = np.zeros((8))
-weak_all   = np.zeros((8))
-for i in range(PC_vals.shape[0]):
-    eof1, eof2, eof3, eof4, eof5, eof6, eof7, eof8 = PC_vals[i, :]
-
-    if mode == 'biweekly':
-        x = eof1; y = eof2
-    elif mode == 'weekly':
-        x = eof3; y = eof4
-
-    amp = np.sqrt(x**2 + y**2)
-    angle = get_angle_deg(x, y)
-
-    if amp > 1:
-        strong_all[get_phase(angle) - 1] += 1
-    else:
-        weak_all[get_phase(angle) - 1] += 1
-        
+#    if mode == 'biweekly':
+#        x = eof1; y = eof2
+#    elif mode == 'weekly':
+#        x = eof3; y = eof4
+#
+#    amp = np.sqrt(x**2 + y**2)
+#    angle = get_angle_deg(x, y)
+#
+#    if amp > 1:
+#        strong_all[get_phase(angle) - 1] += 1
+#    else:
+#        weak_all[get_phase(angle) - 1] += 1
+#        
 #strong /= strong_all
 #weak /= weak_all
-strong = strong_all
-weak = weak_all
+#strong = strong_all
+#weak = weak_all
 
 ################################################################################
 f = plt.figure(figsize=(8,5))
 ax = plt.subplot(111)
 
-#ax.set_title('Distribution of MD Genesis w.r.t. {} EOFs'.format(mode.capitalize()), size=16)
-ax.set_title('{} EOFs Count'.format(mode.capitalize()), size=16)
+#ax.set_title('Distribution of MD Genesis\nin JJAS BoB w.r.t. {} EOFs'.format(mode.capitalize()), size=16)
+#ax.set_title('{} JJAS EOFs Count'.format(mode.capitalize()), size=16)
 ax.set_xlabel('Phase', size=12)
-#ax.set_ylabel('# Genesis Points / # Total Points in Phase', size=12)
+#ax.set_ylabel('# Genesis Points / # Total JJAS Points in Phase', size=12)
 #ax.set_ylabel('# Genesis Points', size=12)
-ax.set_ylabel('# of Events', size=12)
+#ax.set_ylabel('# of JJAS Events', size=12)
 
 centers = np.arange(1, 9)
 width = 0.45
@@ -195,5 +198,5 @@ plt.show()
 
 #f.savefig(mode + '_stratified.png', dpi=120)
 #f.savefig(mode + '_stratified_normalized.png', dpi=120)
-f.savefig(mode + '_all.png', dpi=120)
+#f.savefig(mode + '_all.png', dpi=120)
 #################################################################################
