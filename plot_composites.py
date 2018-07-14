@@ -163,15 +163,17 @@ def plot2dxy_lag_vector_indiv(ufilenames, vfilenames,
         qk = plt.quiverkey(Q, 0.5, 0.05, 2, '2 m/s', coordinates='figure')
 
         # bounding box and center
-        ax.plot([75, 95, 95, 75, 75], [10, 10, 27, 27, 10], 'r-', lw=1.0, transform=proj)
-        ax.plot(85, 18.5, 'ro', ms=3, transform=proj)
+        #ax.plot([75, 95, 95, 75, 75], [10, 10, 27, 27, 10], 'r-', lw=1.0, transform=proj)
+        #ax.plot(85, 18.5, 'ro', ms=3, transform=proj)
+        ax.plot([83, 93, 93, 83, 83], [16, 16, 21, 21, 16], 'r-', lw=1.0, transform=proj)
+        ax.plot(88, 18.5, 'ro', ms=3, transform=proj)
         ax.set_title('{}\nlag ${}$'.format(title, lag))
         plt.tight_layout(pad=5)
         #fname = '/global/home/users/hpeter/images/winds' + str(lvl) + '_biweekly1234s.png'
         if zoom:
-            fname = '/home/hpeter/Research2018/images/winds{}mb_{}{}{}_zoomed_lag{}.png'.format(lvl, mode, phases, amp[0], lag)
+            fname = '/home/hpeter/Research2018/images/winds{}mb_{}{}_zoomed_lag{}.png'.format(lvl, mode, phases, lag)
         else:
-            fname = '/home/hpeter/Research2018/images/winds{}mb_{}{}{}_lag{}.png'.format(lvl, mode, phases, amp[0], lag)
+            fname = '/home/hpeter/Research2018/images/winds{}mb_{}{}_lag{}.png'.format(lvl, mode, phases, lag)
 #        plt.savefig(fname, dpi=120)
 
 def plot2dxy_lag_vector(ufilenames, vfilenames,
@@ -179,13 +181,11 @@ def plot2dxy_lag_vector(ufilenames, vfilenames,
                         vfilenames_ttest=None, 
                         lags=[-2,-1,0,1,2], 
                         lvl=850, mode='biweekly', 
-                        phases='1234', 
-                        amp='strong'):
+                        phases='1234'): 
     # setup
-    title='Significant Anomalous Wind\n({} mb, n = {}, {} {} mode phases {})'.format(lvl, n, amp, mode, phases) 
+    title='Significant Anomalous Wind\n({} mb, n = {}, {} strong mode phases {})'.format(lvl, n, mode, phases) 
     proj = ccrs.PlateCarree()
     f = plt.figure(figsize=(16,5))
-    #f = plt.figure(figsize=(10,10))
     if len(lags) == 5:
         nR = 1; nC = 5
         nums = [1, 2, 3, 4, 5] 
@@ -259,16 +259,17 @@ def plot2dxy_lag_vector(ufilenames, vfilenames,
         qk = plt.quiverkey(Q, 0.5, 0.15, 2, '2 m/s', coordinates='figure')
 
         # bounding box and center
-        ax.plot([75, 95, 95, 75, 75], [10, 10, 27, 27, 10], 'r-', lw=1.0, transform=proj)
-        ax.plot(85, 18.5, 'ro', ms=3, transform=proj)
+        #ax.plot([75, 95, 95, 75, 75], [10, 10, 27, 27, 10], 'r-', lw=1.0, transform=proj)
+        #ax.plot(85, 18.5, 'ro', ms=3, transform=proj)
+        ax.plot([83, 93, 93, 83, 83], [16, 16, 21, 21, 16], 'r-', lw=1.0, transform=proj)
+        ax.plot(88, 18.5, 'ro', ms=3, transform=proj)
         if i == 2:
             ax.set_title('{}\nlag ${}$'.format(title, lag))
         else:
             ax.set_title('lag ${}$'.format(lag))
     plt.tight_layout(pad=3, w_pad=-4)
-    #fname = '/global/home/users/hpeter/images/winds' + str(lvl) + '_biweekly1234s.png'
-    fname = '/home/hpeter/Research2018/images/call20180712/winds{}mb_{}{}{}.png'.format(lvl, mode, phases, amp[0])
-    plt.savefig(fname, dpi=120)
+    #fname = '/home/hpeter/Research2018/images/call20180712/winds{}mb_{}{}.png'.format(lvl, mode, phases)
+    #plt.savefig(fname, dpi=120)
 
 def plot2dxz_lag(filenames, title='Default lags, ttest', lags=[-2,-1,0,1,2], ttest=True):
     # setup
@@ -337,26 +338,22 @@ idir = '/home/hpeter/Research2018/MD_files/composites/'
 #plot2dxy_lag('composite_n150_V_JJAS_strat_harm_ttest_lag', lags=lags012, lvl=850)
 #plot2dxy_lag('composite_n150_V_JJAS_strat_harm_ttest_lag', lags=lags012, lvl=300)
 
-phases = '1234'
-#phases = '5678'
-#phases = '2345'
 #phases = '1678'
-mode   = 'biweekly'
-#mode   = 'weekly'
-amp    = 'strong'
-n      = '150'
-#n      = '113'
-#lvls   = [850, 500, 300]
-lvls   = [850]
+phases = '1238'
+#mode   = 'biweekly'
+mode   = 'weekly'
+#n      = '91'
+n      = '87'
+lvls   = [850, 500, 300]
 for lvl in lvls:
-    plot2dxy_lag_vector_indiv('composite_n{}_U_JJAS_{}{}{}_harm_lag'.format(n, mode, phases, amp[0]), 
-                        'composite_n{}_V_JJAS_{}{}{}_harm_lag'.format(n, mode, phases, amp[0]), 
-                  'composite_n{}_U_JJAS_{}{}{}_harm_ttest_lag'.format(n, mode, phases, amp[0]),
-                  'composite_n{}_V_JJAS_{}{}{}_harm_ttest_lag'.format(n, mode, phases, amp[0]),
-                   lags=lags012, lvl=lvl, mode=mode, phases=phases, amp=amp, zoom=True)
-    #plot2dxy_lag_vector('composite_n{}_U_JJAS_{}{}{}_harm_lag'.format(n, mode, phases, amp[0]), 
+    #plot2dxy_lag_vector_indiv('composite_n{}_U_JJAS_{}{}{}_harm_lag'.format(n, mode, phases, amp[0]), 
     #                    'composite_n{}_V_JJAS_{}{}{}_harm_lag'.format(n, mode, phases, amp[0]), 
     #              'composite_n{}_U_JJAS_{}{}{}_harm_ttest_lag'.format(n, mode, phases, amp[0]),
     #              'composite_n{}_V_JJAS_{}{}{}_harm_ttest_lag'.format(n, mode, phases, amp[0]),
-    #               lags=lags012, lvl=lvl, mode=mode, phases=phases, amp=amp)
+    #               lags=lags012, lvl=lvl, mode=mode, phases=phases, amp=amp, zoom=True)
+    plot2dxy_lag_vector('composite_n{}_U_{}{}_lag'.format(n, mode, phases), 
+                        'composite_n{}_V_{}{}_lag'.format(n, mode, phases), 
+                  'composite_n{}_U_{}{}_ttest_lag'.format(n, mode, phases),
+                  'composite_n{}_V_{}{}_ttest_lag'.format(n, mode, phases),
+                   lags=lags012, lvl=lvl, mode=mode, phases=phases)
 plt.show()
