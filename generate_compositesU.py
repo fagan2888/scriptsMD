@@ -32,9 +32,9 @@ print('Creating composites: printing to latest out file in {}.\n'.format(os.getc
 
 # Load genesis point data
 print('Loading genesis point data...')
-strat = 'weekly1678s'
-genesis_trx = np.load(track_dir + 'BoB_gen_pts_JJAS_{}.npz'.format(strat))
-genesis_trx = genesis_trx['arr_0']
+strat = 'weekly1238'
+trx_data = np.load(track_dir + 'BoB_genesis_pts_{}.npz'.format(strat))
+trx_data = trx_data['arr_0']
 
 #256 lat, 512 lon
 dx = 180 / 256 # dy = 360 / 512 = dx
@@ -69,7 +69,7 @@ else:
 # Pick N evenly spaced genesis pts
 N = 150
 n = 0
-L = len(genesis_trx)
+L = len(trx_data)
 I = 0
 # List of lag days to gather
 lags = [-2, -1, 0, 1, 2]
@@ -95,7 +95,7 @@ if skip == 0:
     skip = 1
 while I < L and n < N:
     # Read genesis point data
-    lon, lat, year, month, day, hour, intensity = genesis_trx[I, :]
+    lon, lat, year, month, day, hour, intensity = trx_data[I, :]
     hour_s = fix_num(hour)
     gen_day = dt.datetime(int(year), int(month), int(day), int(hour))
     # Get number of data points for the year
@@ -164,7 +164,7 @@ for i in range(len(lags)):
                 coords=[levels, lats, lons], 
                 dims=['lvl', 'lat', 'lon'])
     # Save for plotting
-    fname = '{}composite_n{}_{}_JJAS_{}_harm_lag{}.nc'.format(composite_dir, n, variable_name, strat, lags[i])
+    fname = '{}composite_n{}_{}_{}_lag{}.nc'.format(composite_dir, n, variable_name, strat, lags[i])
     comp_da.to_netcdf(fname)
     print('Data saved in {}.'.format(fname))
 
@@ -176,7 +176,7 @@ for i in range(len(lags)):
                 dims=['lvl', 'lat', 'lon'])
 
     # Save for plotting
-    fname = '{}composite_n{}_{}_JJAS_{}_harm_ttest_lag{}.nc'.format(composite_dir, n, variable_name, strat, lags[i])
+    fname = '{}composite_n{}_{}_{}_ttest_lag{}.nc'.format(composite_dir, n, variable_name, strat, lags[i])
     comp_da.to_netcdf(fname)
     print('Data saved in {}.'.format(fname))
 
