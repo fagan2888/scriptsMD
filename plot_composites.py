@@ -351,6 +351,11 @@ for lvl in lvls:
     #              'composite_n{}_U_JJAS_{}{}{}_harm_ttest_lag'.format(n, mode, phases, amp[0]),
     #              'composite_n{}_V_JJAS_{}{}{}_harm_ttest_lag'.format(n, mode, phases, amp[0]),
     #               lags=lags012, lvl=lvl, mode=mode, phases=phases, amp=amp, zoom=True)
+    plot2dxy_lag_vector('1composite_n{}_U_{}{}_lag'.format(n, mode, phases), 
+                        '1composite_n{}_V_{}{}_lag'.format(n, mode, phases), 
+                  '1composite_n{}_U_{}{}_ttest_lag'.format(n, mode, phases),
+                  '1composite_n{}_V_{}{}_ttest_lag'.format(n, mode, phases),
+                   lags=lags012, lvl=lvl, mode=mode, phases=phases)
     plot2dxy_lag_vector('composite_n{}_U_{}{}_lag'.format(n, mode, phases), 
                         'composite_n{}_V_{}{}_lag'.format(n, mode, phases), 
                   'composite_n{}_U_{}{}_ttest_lag'.format(n, mode, phases),

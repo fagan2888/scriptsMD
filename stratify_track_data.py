@@ -103,9 +103,11 @@ print('Total num data points: {}'.format(PC_dates.shape[0]))
 m1 = 6; m2 = 9
 PC_vals = PC_vals[np.where(np.logical_and(PC_dates[:, 1] >= m1, PC_dates[:, 1] <= m2))]
 PC_dates = PC_dates[np.where(np.logical_and(PC_dates[:, 1] >= m1, PC_dates[:, 1] <= m2))]
+PC_vals = PC_vals[np.where(PC_dates[:, 0] < 2017)]
+PC_dates = PC_dates[np.where(PC_dates[:, 0] < 2017)]
 print('Num data points JJAS: {}'.format(PC_dates.shape[0]))
-#mode = 'biweekly'; phases = '1678'
-mode = 'weekly'; phases = '1238'
+mode = 'biweekly'; phases = '1678'
+#mode = 'weekly'; phases = '1238'
 amp_thresh = 0.5
 keep = np.zeros(PC_dates.shape[0], dtype='bool')
 for i in range(PC_dates.shape[0]):
