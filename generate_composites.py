@@ -69,14 +69,16 @@ else:
 
 print('Creating composites: printing to latest out file in {}.\n'.format(os.getcwd()))
 
-# Load genesis point data
-print('Loading genesis point data...')
+# Load event data
+print('Loading event data...')
 #strat = 'weekly1238'
 #trx_data = np.load(track_dir + 'BoB_genesis_pts_{}.npz'.format(strat))
 #strat = 'biweekly1234'
 strat = 'weekly1278'
-trx_data = np.load(track_dir + 'BoB_track_pts_{}.npz'.format(strat))
+trx_data_fname = track_dir + 'BoB_track_pts_{}.npz'.format(strat)
+trx_data = np.load(trx_data_fname)
 trx_data = trx_data['arr_0']
+print('Data loaded from {}'.format(trx_data_fname))
 # Center point of data
 centery = (21 + 16) / 2
 centerx = (93 + 83) / 2
@@ -87,8 +89,8 @@ dy = dx
 
 # Pick N evenly spaced genesis pts
 L = len(trx_data)
-#N = 150
-N = L
+N = 2000
+#N = L
 n = 0
 I = 0
 # List of lag days to gather
@@ -101,6 +103,14 @@ levels = [850, 500, 300]
 # Put all the data in a giant array for processing
 data_total = np.zeros( (len(lags), N, len(levels), 256, 512) )
 print('data_total size: {}'.format(data_total.shape))
+
+#print('Testing Memory...')
+#data = np.random.random( data_total.shape )
+#t, prob = ttest_1samp(data, popmean=0.0, axis=1)
+#print('ttest succeeded')
+#data_mean = np.mean(data, axis=1)
+#print('mean succeeded')
+#os.sys.exit()
 
 # Get Harmonics data to use for calculating anomaly
 print('Loading seasonal harmonics data...')
@@ -164,7 +174,7 @@ while I < L and n < N:
     I += skip
     n += 1
     print('{} events composited.\n'.format(n))
-    if I == L:
+    if I == L and n < N:
         print('Ran out of genesis points before getting {} data points!'.format(N))
         data_total = data_total[:, :n, :, :, :]
         print('New data_total size: {}'.format(data_total.shape))

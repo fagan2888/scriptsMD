@@ -69,8 +69,8 @@ print('Creating composites: printing to latest out file in {}.\n'.format(os.getc
 
 # Load EOF dates data
 print('Loading EOF dates data...')
-#strat = 'biweekly1234'
-strat = 'weekly1278'
+strat = 'biweekly1234'
+#strat = 'weekly1278'
 EOF_dates = np.load(track_dir + 'EOFs_JJAS_{}s.npz'.format(strat))
 EOF_dates = EOF_dates['arr_0']
 
