@@ -100,86 +100,86 @@ PC_vals[:, 6] /= s7
 PC_vals[:, 7] /= s7
 
 
-#### ALL EOFS
-#print('Total num data points: {}'.format(PC_dates.shape[0]))
-#m1 = 6; m2 = 9
-#PC_vals = PC_vals[np.where(np.logical_and(PC_dates[:, 1] >= m1, PC_dates[:, 1] <= m2))]
-#PC_dates = PC_dates[np.where(np.logical_and(PC_dates[:, 1] >= m1, PC_dates[:, 1] <= m2))]
-#PC_vals = PC_vals[np.where(PC_dates[:, 0] < 2017)]
-#PC_dates = PC_dates[np.where(PC_dates[:, 0] < 2017)]
-#print('Num data points JJAS: {}'.format(PC_dates.shape[0]))
-#mode = 'biweekly'; phases = '1678'
-##mode = 'weekly'; phases = '1238'
-#amp_thresh = 0.5
-#keep = np.zeros(PC_dates.shape[0], dtype='bool')
-#for i in range(PC_dates.shape[0]):
-#    eof1, eof2, eof3, eof4, eof5, eof6, eof7, eof8 = PC_vals[i, :]
-#    if mode == 'biweekly':
-#        amp = np.sqrt(eof1**2 + eof2**2)
-#        angle = get_angle_deg(eof1, eof2)
-#    elif mode == 'weekly':
-#        amp = np.sqrt(eof3**2 + eof4**2)
-#        angle = get_angle_deg(eof3, eof4)
-#    phase = get_phase(angle)
-#    if amp >= amp_thresh and str(phase) in phases:
-#        keep[i] = True
-#PC_dates = PC_dates[keep]
-#print('Num data points JJAS, mode={}, phases={}, amp_thresh={}: {}'.format(mode, phases, amp_thresh, PC_dates.shape[0]))
-#print(PC_dates)
-#fname = 'EOFs_JJAS_{}{}s.npz'.format(mode, phases)
-#np.savez(fname, PC_dates)
-#print('Saved to {}.'.format(fname))
+### ALL EOFS
+print('Total num data points: {}'.format(PC_dates.shape[0]))
+m1 = 6; m2 = 9
+PC_vals = PC_vals[np.where(np.logical_and(PC_dates[:, 1] >= m1, PC_dates[:, 1] <= m2))]
+PC_dates = PC_dates[np.where(np.logical_and(PC_dates[:, 1] >= m1, PC_dates[:, 1] <= m2))]
+PC_vals = PC_vals[np.where(PC_dates[:, 0] < 2017)]
+PC_dates = PC_dates[np.where(PC_dates[:, 0] < 2017)]
+print('Num data points JJAS: {}'.format(PC_dates.shape[0]))
+#mode = 'biweekly'; phases = '1234'
+mode = 'weekly'; phases = '1278'
+amp_thresh = 0.5
+keep = np.zeros(PC_dates.shape[0], dtype='bool')
+for i in range(PC_dates.shape[0]):
+    eof1, eof2, eof3, eof4, eof5, eof6, eof7, eof8 = PC_vals[i, :]
+    if mode == 'biweekly':
+        amp = np.sqrt(eof1**2 + eof2**2)
+        angle = get_angle_deg(eof1, eof2)
+    elif mode == 'weekly':
+        amp = np.sqrt(eof3**2 + eof4**2)
+        angle = get_angle_deg(eof3, eof4)
+    phase = get_phase(angle)
+    if amp >= amp_thresh and str(phase) in phases:
+        keep[i] = True
+PC_dates = PC_dates[keep]
+print('Num data points JJAS, mode={}, phases={}, amp_thresh={}: {}'.format(mode, phases, amp_thresh, PC_dates.shape[0]))
+print(PC_dates)
+fname = 'EOFs_JJAS_{}{}s.npz'.format(mode, phases)
+np.savez(fname, PC_dates)
+print('Saved to {}.'.format(fname))
 
     
-### TRACK/GENESIS POINTS
-print('Number of {} points: {}'.format(points_type, MD_set.shape[0]))
-
-# Narrow lon
-#llon = 75; rlon = 95
-llon = 83; rlon = 93
-MD_set = MD_set[np.where(np.logical_and(MD_set[:,0] >= llon, MD_set[:,0] <= rlon))]
-
-# Narrow lat
-#llat = 10; ulat = 27
-llat = 16; ulat = 21
-MD_set = MD_set[np.where(np.logical_and(MD_set[:,1] >= llat, MD_set[:,1] <= ulat))]
-
-# Narrow time
-m1 = 6;  m2 = 9
-MD_set = MD_set[np.where(np.logical_and(MD_set[:,3] >= m1, MD_set[:,3] <= m2))]
-PC_vals  = PC_vals[ np.where(np.logical_and(PC_dates[:, 1] >= m1, PC_dates[:, 1] <= m2))]
-PC_dates = PC_dates[np.where(np.logical_and(PC_dates[:, 1] >= m1, PC_dates[:, 1] <= m2))]
-
-# Narrow intensity
-min_int = 1
-MD_set = MD_set[np.where(MD_set[:,6] >= min_int)]
-
-print('Number of {} points within constraints: {}'.format(points_type, MD_set.shape[0]))
-
-# Stratify
-amp_thresh = 0.5
-strat_array = stratify_data(MD_set)
-
-#mode = 'biweekly'
-#phases = '1234'
-mode = 'weekly'
-phases = '1278'
-if mode == 'biweekly':
-    strat = MD_set[np.where(np.logical_and( strat_array[:, 0] >= amp_thresh, 
-                            np.logical_or(strat_array[:, 1] == int(phases[0]),
-                            np.logical_or(strat_array[:, 1] == int(phases[1]),
-                            np.logical_or(strat_array[:, 1] == int(phases[2]),
-                                          strat_array[:, 1] == int(phases[3]))))))]
-elif mode == 'weekly':
-    strat = MD_set[np.where(np.logical_and( strat_array[:, 2] >= amp_thresh, 
-                            np.logical_or(strat_array[:, 3] == int(phases[0]),
-                            np.logical_or(strat_array[:, 3] == int(phases[1]),
-                            np.logical_or(strat_array[:, 3] == int(phases[2]),
-                                          strat_array[:, 3] == int(phases[3]))))))]
-print('After stratification: {}'.format(strat.shape[0]))
-fname = 'BoB_{}_pts_{}{}.npz'.format(points_type, mode, phases)
-np.savez(fname, strat)
-print('Saved to {}.'.format(fname))
+#### TRACK/GENESIS POINTS
+#print('Number of {} points: {}'.format(points_type, MD_set.shape[0]))
+#
+## Narrow lon
+##llon = 75; rlon = 95
+#llon = 83; rlon = 93
+#MD_set = MD_set[np.where(np.logical_and(MD_set[:,0] >= llon, MD_set[:,0] <= rlon))]
+#
+## Narrow lat
+##llat = 10; ulat = 27
+#llat = 16; ulat = 21
+#MD_set = MD_set[np.where(np.logical_and(MD_set[:,1] >= llat, MD_set[:,1] <= ulat))]
+#
+## Narrow time
+#m1 = 6;  m2 = 9
+#MD_set = MD_set[np.where(np.logical_and(MD_set[:,3] >= m1, MD_set[:,3] <= m2))]
+#PC_vals  = PC_vals[ np.where(np.logical_and(PC_dates[:, 1] >= m1, PC_dates[:, 1] <= m2))]
+#PC_dates = PC_dates[np.where(np.logical_and(PC_dates[:, 1] >= m1, PC_dates[:, 1] <= m2))]
+#
+## Narrow intensity
+#min_int = 1
+#MD_set = MD_set[np.where(MD_set[:,6] >= min_int)]
+#
+#print('Number of {} points within constraints: {}'.format(points_type, MD_set.shape[0]))
+#
+## Stratify
+#amp_thresh = 0.5
+#strat_array = stratify_data(MD_set)
+#
+##mode = 'biweekly'
+##phases = '1234'
+#mode = 'weekly'
+#phases = '1278'
+#if mode == 'biweekly':
+#    strat = MD_set[np.where(np.logical_and( strat_array[:, 0] >= amp_thresh, 
+#                            np.logical_or(strat_array[:, 1] == int(phases[0]),
+#                            np.logical_or(strat_array[:, 1] == int(phases[1]),
+#                            np.logical_or(strat_array[:, 1] == int(phases[2]),
+#                                          strat_array[:, 1] == int(phases[3]))))))]
+#elif mode == 'weekly':
+#    strat = MD_set[np.where(np.logical_and( strat_array[:, 2] >= amp_thresh, 
+#                            np.logical_or(strat_array[:, 3] == int(phases[0]),
+#                            np.logical_or(strat_array[:, 3] == int(phases[1]),
+#                            np.logical_or(strat_array[:, 3] == int(phases[2]),
+#                                          strat_array[:, 3] == int(phases[3]))))))]
+#print('After stratification: {}'.format(strat.shape[0]))
+#fname = 'BoB_{}_pts_{}{}.npz'.format(points_type, mode, phases)
+#np.savez(fname, strat)
+#print('Saved to {}.'.format(fname))
 #
 ###normalize = True
 ##normalize = False
