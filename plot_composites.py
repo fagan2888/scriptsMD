@@ -423,7 +423,9 @@ idir = '/home/hpeter/Research2018/MD_files/composites/'
 #phases = '1678'; mode = 'biweekly'; n = '91'
 #phases = '1238'; mode = 'weekly'; n = '87'
 #phases = '1678'; mode = 'biweekly'; n = '4201'
-phases = '1238'; mode = 'weekly'; n = '4271'
+#phases = '1238'; mode = 'weekly'; n = '4271'
+#phases = '1278'; mode = 'weekly'; n = '4271'
+phases = '1234'; mode = 'biweekly'; n = '4318'
 
 lvls   = [850, 500, 300]
 #lvls = [850]
