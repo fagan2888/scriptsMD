@@ -32,7 +32,7 @@ print('Creating composites: printing to latest out file in {}.\n'.format(os.getc
 
 # Load genesis point data
 print('Loading genesis point data...')
-strat = 'biweekly1678'
+strat = 'weekly1238'
 trx_data = np.load(track_dir + 'BoB_genesis_pts_{}.npz'.format(strat))
 trx_data = trx_data['arr_0']
 
@@ -147,9 +147,9 @@ while I < L and n < N:
     if I == L:
         print('Ran out of genesis points before getting {} data points!'.format(N))
         data_total = data_total[:, :n, :, :, :]
-        print('New data_total size: {}'.format(data_total.shape))
+        print('new data_total size: {}'.format(data_total.shape))
 
-print('\nDone. Processing data...')
+print('Done. Processing data...')
 
 # Get Lats/Lons from last grib
 lats, lons = grb[0].latlons()
@@ -167,7 +167,7 @@ for i in range(len(lags)):
                 coords=[levels, lats, lons], 
                 dims=['lvl', 'lat', 'lon'])
     # Save for plotting
-    fname = '{}composite_n{}_{}_{}_lag{}.nc'.format(composite_dir, n, variable_name, strat, lags[i])
+    fname = '{}1composite_n{}_{}_{}_lag{}.nc'.format(composite_dir, n, variable_name, strat, lags[i])
     comp_da.to_netcdf(fname)
     print('Data saved in {}.'.format(fname))
 
@@ -179,7 +179,7 @@ for i in range(len(lags)):
                 dims=['lvl', 'lat', 'lon'])
 
     # Save for plotting
-    fname = '{}composite_n{}_{}_{}_ttest_lag{}.nc'.format(composite_dir, n, variable_name, strat, lags[i])
+    fname = '{}1composite_n{}_{}_{}_ttest_lag{}.nc'.format(composite_dir, n, variable_name, strat, lags[i])
     comp_da.to_netcdf(fname)
     print('Data saved in {}.'.format(fname))
 

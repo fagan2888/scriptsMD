@@ -32,7 +32,7 @@ print('Creating composites: printing to latest out file in {}.\n'.format(os.getc
 
 # Load genesis point data
 print('Loading genesis point data...')
-strat = 'weekly1238'
+strat = 'biweekly1678'
 trx_data = np.load(track_dir + 'BoB_genesis_pts_{}.npz'.format(strat))
 trx_data = trx_data['arr_0']
 
@@ -80,6 +80,7 @@ levels = [850, 500, 300]
 
 # Put all the data in a giant array for processing
 data_total = np.zeros( (len(lags), N, len(levels), 256, 512) )
+print('data_total size: {}'.format(data_total.shape))
 
 # Get Harmonics data to use for calculating anomaly
 print('Loading seasonal harmonics data...')
@@ -145,8 +146,10 @@ while I < L and n < N:
     print('{} genesis points composited.\n'.format(n))
     if I == L:
         print('Ran out of genesis points before getting {} data points!'.format(N))
+        data_total = data_total[:, :n, :, :, :]
+        print('New data_total size: {}'.format(data_total.shape))
 
-print('Done. Processing data...')
+print('\nDone. Processing data...')
 
 # Get Lats/Lons from last grib
 lats, lons = grb[0].latlons()
@@ -154,7 +157,7 @@ lats = lats[:, 0]
 lons = lons[0, :]
 
 # t test -- null hypothesis that (data - daily mean) not different from 0.0
-# going along axis 1 (the N gen pts) thus outputs prob array of size (lags, z, y, x)
+# going along axis 1 (the n gen pts) thus outputs prob array of size (lags, z, y, x)
 t, prob = ttest_1samp(data_total, popmean=0.0, axis=1)
 
 # First save raw data
