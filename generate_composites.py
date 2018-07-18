@@ -74,7 +74,8 @@ print('Loading event data...')
 #strat = 'weekly1238'
 #trx_data = np.load(track_dir + 'BoB_genesis_pts_{}.npz'.format(strat))
 #strat = 'biweekly1234'
-strat = 'weekly1278'
+#strat = 'weekly1278'
+strat = 'biweekly5678'
 trx_data_fname = track_dir + 'BoB_track_pts_{}.npz'.format(strat)
 trx_data = np.load(trx_data_fname)
 trx_data = trx_data['arr_0']

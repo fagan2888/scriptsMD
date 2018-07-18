@@ -53,7 +53,8 @@ print('Variable name: {}\nTranslated to: \n\t{}.\n'.format(variable_name, grb_na
 print('Loading event data...')
 mode = 'biweekly'
 phases = '1234'
-date = '19940706'
+#date = '19940706'
+date = '20100723'
 trx_data_fname = '{}BoB_followed_track_{}_{}{}.npz'.format(track_dir, date, mode, phases)
 trx_data = np.load(trx_data_fname)
 trx_data = trx_data['arr_0']
@@ -143,6 +144,7 @@ comp_ds = xr.Dataset({'u': u_da, 'v': v_da},
                             'lon': lons})
 # Save for plotting
 fname = '{}track_{}_{}_{}{}.nc'.format(follow_dir, variable_name, track_dates[0].strftime('%Y%m%d%H'), mode, phases)
+#fname = '{}track_noharm_{}_{}_{}{}.nc'.format(follow_dir, variable_name, track_dates[0].strftime('%Y%m%d%H'), mode, phases)
 comp_ds.to_netcdf(fname)
 print('Data saved in {}.'.format(fname))
 

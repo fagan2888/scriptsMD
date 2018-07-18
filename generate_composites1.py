@@ -73,8 +73,9 @@ print('Creating composites: printing to latest out file in {}.\n'.format(os.getc
 print('Loading event data...')
 #strat = 'weekly1238'
 #trx_data = np.load(track_dir + 'BoB_genesis_pts_{}.npz'.format(strat))
-strat = 'biweekly1234'
+#strat = 'biweekly1234'
 #strat = 'weekly1278'
+strat = 'weekly3456'
 trx_data_fname = track_dir + 'BoB_track_pts_{}.npz'.format(strat)
 trx_data = np.load(trx_data_fname)
 trx_data = trx_data['arr_0']
