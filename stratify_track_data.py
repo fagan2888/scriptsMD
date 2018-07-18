@@ -220,11 +220,17 @@ print('Number of {} points within constraints: {}\n'.format(points_type, MD_set.
 ################################################################################
 ### PICK A TRACK 
 ################################################################################
-#New candidate track (number 10): index numbers 226502-226530
-#Begins 1994-7-6 18:00:00, intensity 2, position 92.1 21.4.
-#Length: 28 (7.0 days), 14 in desired phase at strong amplitude.
-#Progression in biweekly EOFs: [7. 7. 7. 8. 7. 8. 7. 7. 7. 8. 8. 8. 8. 8. 1. 1. 1. 1. 1. 2. 1. 2. 2. 3. 2. 4. 4. 4.]
-i0 = 226502; i1 = 226530
+##New candidate track (number 10): index numbers 226502-226530
+##Begins 1994-7-6 18:00:00, intensity 2, position 92.1 21.4.
+##Length: 28 (7.0 days), 14 in desired phase at strong amplitude.
+##Progression in biweekly EOFs: [7. 7. 7. 8. 7. 8. 7. 7. 7. 8. 8. 8. 8. 8. 1. 1. 1. 1. 1. 2. 1. 2. 2. 3. 2. 4. 4. 4.]
+#i0 = 226502; i1 = 226530
+
+#New candidate track (number 18): index numbers 261365-261389
+#Begins 2010-7-23 18:00:00, intensity 2, position 89.3 20.7.
+#Length: 24 (6.0 days), 23 in desired phase at strong amplitude.
+#Progression in biweekly EOFs: [8. 1. 1. 2. 1. 2. 2. 2. 2. 1. 1. 1. 1. 1. 2. 2. 2. 2. 3. 3. 3. 4. 4. 4.]
+i0 = 261365; i1 = 261389
 track = trx_NH[i0:i1, :]
 year  = int(track[0, 2])
 month = int(track[0, 3])

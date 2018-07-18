@@ -263,7 +263,7 @@ def plot2dxy_lag_vector(ufilenames, vfilenames,
             ax.set_title('{}\nlag ${}$'.format(title, lag))
         else:
             ax.set_title('lag ${}$'.format(lag))
-    plt.tight_layout(pad=3, w_pad=-4)
+    plt.tight_layout(pad=3, w_pad=-6)
     #fname = '/home/hpeter/Research2018/images/call20180712/winds{}mb_{}{}.png'.format(lvl, mode, phases)
     #plt.savefig(fname, dpi=120)
 
@@ -425,7 +425,9 @@ idir = '/home/hpeter/Research2018/MD_files/composites/'
 #phases = '1678'; mode = 'biweekly'; n = '4201'
 #phases = '1238'; mode = 'weekly'; n = '4271'
 #phases = '1278'; mode = 'weekly'; n = '4271'
-phases = '1234'; mode = 'biweekly'; n = '4318'
+#phases = '1234'; mode = 'biweekly'; n = '4318'
+#phases = '1234'; mode = 'biweekly'; n = '2359'
+phases = '1278'; mode = 'weekly'; n = '2383'
 
 lvls   = [850, 500, 300]
 #lvls = [850]
@@ -436,14 +438,14 @@ for lvl in lvls:
     #              'composite_n{}_U_{}{}_ttest_lag'.format(n, mode, phases),
     #              'composite_n{}_V_{}{}_ttest_lag'.format(n, mode, phases),
     #               lags=lags012, lvl=lvl, mode=mode, phases=phases, zoom=True)
-    #plot2dxy_lag_vector('composite_n{}_U_{}{}_lag'.format(n, mode, phases), 
-    #                    'composite_n{}_V_{}{}_lag'.format(n, mode, phases), 
-    #              'composite_n{}_U_{}{}_ttest_lag'.format(n, mode, phases),
-    #              'composite_n{}_V_{}{}_ttest_lag'.format(n, mode, phases),
-    #               lags=lags012, lvl=lvl, mode=mode, phases=phases)
-    plot2dxy_vector_EOF('composite_EOFs_n{}_U_{}{}.nc'.format(n, mode, phases), 
-                        'composite_EOFs_n{}_V_{}{}.nc'.format(n, mode, phases), 
-                  'composite_EOFs_n{}_U_{}{}_ttest.nc'.format(n, mode, phases),
-                  'composite_EOFs_n{}_V_{}{}_ttest.nc'.format(n, mode, phases),
-                  lvl=lvl, mode=mode, phases=phases)
+    plot2dxy_lag_vector('composite_n{}_U_{}{}_lag'.format(n, mode, phases), 
+                        'composite_n{}_V_{}{}_lag'.format(n, mode, phases), 
+                  'composite_n{}_U_{}{}_ttest_lag'.format(n, mode, phases),
+                  'composite_n{}_V_{}{}_ttest_lag'.format(n, mode, phases),
+                   lags=lags012, lvl=lvl, mode=mode, phases=phases)
+    #plot2dxy_vector_EOF('composite_EOFs_n{}_U_{}{}.nc'.format(n, mode, phases), 
+    #                    'composite_EOFs_n{}_V_{}{}.nc'.format(n, mode, phases), 
+    #              'composite_EOFs_n{}_U_{}{}_ttest.nc'.format(n, mode, phases),
+    #              'composite_EOFs_n{}_V_{}{}_ttest.nc'.format(n, mode, phases),
+    #              lvl=lvl, mode=mode, phases=phases)
 plt.show()

@@ -37,6 +37,7 @@ def plot_vector_indiv(filename, lvl=850, mode='biweekly',
     proj = ccrs.PlateCarree()
     for i, time in enumerate(t):
         title='{} mb Anomalous Wind\nDate: {}'.format(lvl, time.strftime('%Y-%m-%d %H:00:00')) 
+        #title='{} mb Wind\nDate: {}'.format(lvl, time.strftime('%Y-%m-%d %H:00:00')) 
         print(title)
 
         U = u_da.sel(time=time).values
@@ -78,14 +79,16 @@ def plot_vector_indiv(filename, lvl=850, mode='biweekly',
             fname = '{}track_following_UV_zoomed_{}_{}{}_{}_{}.png'.format(idir, date.strftime('%Y%m%d%H'), mode, phases, lvl, str(i).zfill(3))
         else:
             fname = '{}track_following_UV_{}_{}{}_{}_{}.png'.format(idir, date.strftime('%Y%m%d%H'), mode, phases, lvl, str(i).zfill(3))
+#            fname = '{}track_following_noharm_UV_{}_{}{}_{}_{}.png'.format(idir, date.strftime('%Y%m%d%H'), mode, phases, lvl, str(i).zfill(3))
         plt.savefig(fname, dpi=120)
         plt.close()
 
 idir = '/home/hpeter/Research2018/MD_files/track_following/'
 
 phases = '1234'; mode = 'biweekly'; date = dt.datetime(year=1994, month=7, day=6, hour=18)
-lvls   = [850]
+lvls   = [500, 300]
 
 for lvl in lvls:
     plot_vector_indiv('track_UV_{}_{}{}.nc'.format(date.strftime('%Y%m%d%H'), mode, phases), 
+    #plot_vector_indiv('track_noharm_UV_{}_{}{}.nc'.format(date.strftime('%Y%m%d%H'), mode, phases), 
                    lvl=lvl, mode=mode, phases=phases, date=date, zoom=False)
