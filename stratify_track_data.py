@@ -217,59 +217,61 @@ print('Number of {} points within constraints: {}\n'.format(points_type, MD_set.
 #    print()
 
 
-################################################################################
-### PICK A TRACK 
-################################################################################
-##New candidate track (number 10): index numbers 226502-226530
-##Begins 1994-7-6 18:00:00, intensity 2, position 92.1 21.4.
-##Length: 28 (7.0 days), 14 in desired phase at strong amplitude.
-##Progression in biweekly EOFs: [7. 7. 7. 8. 7. 8. 7. 7. 7. 8. 8. 8. 8. 8. 1. 1. 1. 1. 1. 2. 1. 2. 2. 3. 2. 4. 4. 4.]
-#i0 = 226502; i1 = 226530
-
-#New candidate track (number 18): index numbers 261365-261389
-#Begins 2010-7-23 18:00:00, intensity 2, position 89.3 20.7.
-#Length: 24 (6.0 days), 23 in desired phase at strong amplitude.
-#Progression in biweekly EOFs: [8. 1. 1. 2. 1. 2. 2. 2. 2. 1. 1. 1. 1. 1. 2. 2. 2. 2. 3. 3. 3. 4. 4. 4.]
-i0 = 261365; i1 = 261389
-track = trx_NH[i0:i1, :]
-year  = int(track[0, 2])
-month = int(track[0, 3])
-day   = int(track[0, 4])
-date = dt.datetime(year=year, month=month, day=day)
-mode = 'biweekly'
-phases = '1234'
-fname = 'BoB_followed_track_{}_{}{}.npz'.format(date.strftime('%Y%m%d'), mode, phases)
-np.savez(fname, track)
-print('Saved to {}.'.format(fname))
-
 #################################################################################
-#### Stratify
+#### PICK A TRACK 
 #################################################################################
-#strat_array = stratify_data(MD_set)
-
-#################################################################################
-#### SAVE DATA
-#################################################################################
-##mode = 'biweekly'
-##phases = '1234'
-#mode = 'weekly'
-#phases = '1278'
-#if mode == 'biweekly':
-#    strat = MD_set[np.where(np.logical_and( strat_array[:, 0] >= amp_thresh, 
-#                            np.logical_or(strat_array[:, 1] == int(phases[0]),
-#                            np.logical_or(strat_array[:, 1] == int(phases[1]),
-#                            np.logical_or(strat_array[:, 1] == int(phases[2]),
-#                                          strat_array[:, 1] == int(phases[3]))))))]
-#elif mode == 'weekly':
-#    strat = MD_set[np.where(np.logical_and( strat_array[:, 2] >= amp_thresh, 
-#                            np.logical_or(strat_array[:, 3] == int(phases[0]),
-#                            np.logical_or(strat_array[:, 3] == int(phases[1]),
-#                            np.logical_or(strat_array[:, 3] == int(phases[2]),
-#                                          strat_array[:, 3] == int(phases[3]))))))]
-#print('After stratification: {}'.format(strat.shape[0]))
-#fname = 'BoB_{}_pts_{}{}.npz'.format(points_type, mode, phases)
-#np.savez(fname, strat)
+###New candidate track (number 10): index numbers 226502-226530
+###Begins 1994-7-6 18:00:00, intensity 2, position 92.1 21.4.
+###Length: 28 (7.0 days), 14 in desired phase at strong amplitude.
+###Progression in biweekly EOFs: [7. 7. 7. 8. 7. 8. 7. 7. 7. 8. 8. 8. 8. 8. 1. 1. 1. 1. 1. 2. 1. 2. 2. 3. 2. 4. 4. 4.]
+##i0 = 226502; i1 = 226530
+#
+##New candidate track (number 18): index numbers 261365-261389
+##Begins 2010-7-23 18:00:00, intensity 2, position 89.3 20.7.
+##Length: 24 (6.0 days), 23 in desired phase at strong amplitude.
+##Progression in biweekly EOFs: [8. 1. 1. 2. 1. 2. 2. 2. 2. 1. 1. 1. 1. 1. 2. 2. 2. 2. 3. 3. 3. 4. 4. 4.]
+#i0 = 261365; i1 = 261389
+#track = trx_NH[i0:i1, :]
+#year  = int(track[0, 2])
+#month = int(track[0, 3])
+#day   = int(track[0, 4])
+#date = dt.datetime(year=year, month=month, day=day)
+#mode = 'biweekly'
+#phases = '1234'
+#fname = 'BoB_followed_track_{}_{}{}.npz'.format(date.strftime('%Y%m%d'), mode, phases)
+#np.savez(fname, track)
 #print('Saved to {}.'.format(fname))
+
+################################################################################
+### Stratify
+################################################################################
+strat_array = stratify_data(MD_set)
+
+################################################################################
+### SAVE DATA
+################################################################################
+mode = 'biweekly'
+#phases = '1234'
+phases = '5678'
+#mode = 'weekly'
+##phases = '1278'
+#phases = '3456'
+if mode == 'biweekly':
+    strat = MD_set[np.where(np.logical_and( strat_array[:, 0] >= amp_thresh, 
+                            np.logical_or(strat_array[:, 1] == int(phases[0]),
+                            np.logical_or(strat_array[:, 1] == int(phases[1]),
+                            np.logical_or(strat_array[:, 1] == int(phases[2]),
+                                          strat_array[:, 1] == int(phases[3]))))))]
+elif mode == 'weekly':
+    strat = MD_set[np.where(np.logical_and( strat_array[:, 2] >= amp_thresh, 
+                            np.logical_or(strat_array[:, 3] == int(phases[0]),
+                            np.logical_or(strat_array[:, 3] == int(phases[1]),
+                            np.logical_or(strat_array[:, 3] == int(phases[2]),
+                                          strat_array[:, 3] == int(phases[3]))))))]
+print('After stratification: {}'.format(strat.shape[0]))
+fname = 'BoB_{}_pts_{}{}.npz'.format(points_type, mode, phases)
+np.savez(fname, strat)
+print('Saved to {}.'.format(fname))
 
 ##################################################################################
 #### PLOT DATA
