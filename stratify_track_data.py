@@ -102,14 +102,23 @@ if __name__ == '__main__':
     trx_NH = np.loadtxt(trx_NH_fname)
     PC_dates = np.loadtxt(PC_dates_fname, dtype='int')
     PC_vals = np.loadtxt(PC_vals_fname)
-    
-    points_type = 'genesis'
-    #points_type = 'track'
-    amp_thresh = 0.5
+   
+    # set params: 
+    #points_type = 'genesis'
+    points_type = 'track'
     if points_type == 'genesis':
         MD_set = trx_NH[geninits_NH - 1, :]
     elif points_type == 'track':
         MD_set = trx_NH
+    amp_thresh = 0.5
+    llon = 83; rlon = 93
+    llat = 16; ulat = 21
+    m1 = 6;  m2 = 9
+    min_int = 2
+    intensities = ''
+    for i in range(1, 4):
+        if i >= min_int:
+            intensities += str(i)
     
     # Normalize data
     s1 = np.std(PC_vals[:, 0])
@@ -160,28 +169,24 @@ if __name__ == '__main__':
     
         
     ################################################################################
-    ### TRACK/GENESIS POINTS
+    ### NARROW TRACK/GENESIS POINTS
     ################################################################################
     print('Number of {} points: {}'.format(points_type, MD_set.shape[0]))
     
     # Narrow lon
-    #llon = 75; rlon = 95
-    llon = 83; rlon = 93
+    # old: llon = 75; rlon = 95
     MD_set = MD_set[np.where(np.logical_and(MD_set[:,0] >= llon, MD_set[:,0] <= rlon))]
     
     # Narrow lat
-    #llat = 10; ulat = 27
-    llat = 16; ulat = 21
+    # old: llat = 10; ulat = 27
     MD_set = MD_set[np.where(np.logical_and(MD_set[:,1] >= llat, MD_set[:,1] <= ulat))]
     
     # Narrow time
-    m1 = 6;  m2 = 9
     MD_set = MD_set[np.where(np.logical_and(MD_set[:,3] >= m1, MD_set[:,3] <= m2))]
     PC_vals  = PC_vals[ np.where(np.logical_and(PC_dates[:, 1] >= m1, PC_dates[:, 1] <= m2))]
     PC_dates = PC_dates[np.where(np.logical_and(PC_dates[:, 1] >= m1, PC_dates[:, 1] <= m2))]
     
     # Narrow intensity
-    min_int = 1
     MD_set = MD_set[np.where(MD_set[:,6] >= min_int)]
     
     print('Number of {} points within constraints: {}\n'.format(points_type, MD_set.shape[0]))
@@ -272,116 +277,116 @@ if __name__ == '__main__':
     strat_array = stratify_data(MD_set, PC_dates, PC_vals)
     #strat_array = stratify_data_vort(MD_set, PC_dates, PC_vals)
     
-    #################################################################################
-    #### SAVE DATA
-    #################################################################################
+    ################################################################################
+    ### SAVE DATA
+    ################################################################################
     #mode = 'biweekly'
-    ##phases = '1234'
+    #phases = '1234'
     #phases = '5678'
-    ##mode = 'weekly'
-    ###phases = '1278'
-    ##phases = '3456'
-    #if mode == 'biweekly':
-    #    strat = MD_set[np.where(np.logical_and( strat_array[:, 0] >= amp_thresh, 
-    #                            np.logical_or(strat_array[:, 1] == int(phases[0]),
-    #                            np.logical_or(strat_array[:, 1] == int(phases[1]),
-    #                            np.logical_or(strat_array[:, 1] == int(phases[2]),
-    #                                          strat_array[:, 1] == int(phases[3]))))))]
-    #elif mode == 'weekly':
-    #    strat = MD_set[np.where(np.logical_and( strat_array[:, 2] >= amp_thresh, 
-    #                            np.logical_or(strat_array[:, 3] == int(phases[0]),
-    #                            np.logical_or(strat_array[:, 3] == int(phases[1]),
-    #                            np.logical_or(strat_array[:, 3] == int(phases[2]),
-    #                                          strat_array[:, 3] == int(phases[3]))))))]
-    #print('After stratification: {}'.format(strat.shape[0]))
-    #fname = 'BoB_{}_pts_{}{}.npz'.format(points_type, mode, phases)
-    #np.savez(fname, strat)
-    #print('Saved to {}.'.format(fname))
+    mode = 'weekly'
+    phases = '1278'
+    #phases = '3456'
+    if mode == 'biweekly':
+        strat = MD_set[np.where(np.logical_and( strat_array[:, 0] >= amp_thresh, 
+                                np.logical_or(strat_array[:, 1] == int(phases[0]),
+                                np.logical_or(strat_array[:, 1] == int(phases[1]),
+                                np.logical_or(strat_array[:, 1] == int(phases[2]),
+                                              strat_array[:, 1] == int(phases[3]))))))]
+    elif mode == 'weekly':
+        strat = MD_set[np.where(np.logical_and( strat_array[:, 2] >= amp_thresh, 
+                                np.logical_or(strat_array[:, 3] == int(phases[0]),
+                                np.logical_or(strat_array[:, 3] == int(phases[1]),
+                                np.logical_or(strat_array[:, 3] == int(phases[2]),
+                                              strat_array[:, 3] == int(phases[3]))))))]
+    print('After stratification: {}'.format(strat.shape[0]))
+    fname = 'BoB_{}_pts_int{}_{}{}.npz'.format(points_type, intensities, mode, phases)
+    np.savez(fname, strat)
+    print('Saved to {}.'.format(fname))
     
-    #################################################################################
-    ### PLOT DATA
-    #################################################################################
-    #normalize = True
-    normalize = False
-    show_season_totals = True
-    #show_season_totals = False
-    for mode in ['weekly', 'biweekly']:
-        print('Mode: {}'.format(mode))
-        strong = np.zeros((8))
-        weak   = np.zeros((8))
-        for phase in range(1, 9):
-            if mode == 'biweekly':
-                strong[phase-1] = strat_array[np.where(np.logical_and( strat_array[:, 0] >= amp_thresh, strat_array[:, 1] == phase ))].shape[0]
-                weak[phase-1] =   strat_array[np.where(np.logical_and( strat_array[:, 0]  < amp_thresh, strat_array[:, 1] == phase ))].shape[0]
-            elif mode == 'weekly':
-                strong[phase-1] = strat_array[np.where(np.logical_and( strat_array[:, 2] >= amp_thresh, strat_array[:, 3] == phase ))].shape[0]
-                weak[phase-1] =   strat_array[np.where(np.logical_and( strat_array[:, 2]  < amp_thresh, strat_array[:, 3] == phase ))].shape[0]
-        print('Strong: {}, sum = {}'.format(strong, np.sum(strong)))
-        print('Weak: {}, sum = {}'.format(weak, np.sum(weak)))
-        print('total: {}'.format(np.sum(strong+weak)))
-       
-        if normalize or show_season_totals:
-            strong_all = np.zeros((8))
-            weak_all   = np.zeros((8))
-            for i in range(PC_vals.shape[0]):
-                eof1, eof2, eof3, eof4, eof5, eof6, eof7, eof8 = PC_vals[i, :]
-            
-                if mode == 'biweekly':
-                    x = eof1; y = eof2
-                elif mode == 'weekly':
-                    x = eof3; y = eof4
-            
-                amp = np.sqrt(x**2 + y**2)
-                angle = get_angle_deg(x, y)
-            
-                if amp > amp_thresh:
-                    strong_all[get_phase(angle) - 1] += 1
-                else:
-                    weak_all[get_phase(angle) - 1] += 1
-            if normalize: 
-                strong /= strong_all
-                weak /= weak_all
-       
-        if show_season_totals:
-            f = plt.figure(figsize=(8,5))
-            ax = plt.subplot(111)
-            
-            ax.set_title('Distribution of {} (OLR) EOFs in JJAS'.format(mode.capitalize()), size=16)
-            ax.set_xlabel('Phase', size=12)
-            ax.set_ylabel('# Total Points in Phase', size=12)
-            
-            centers = np.arange(1, 9)
-            width = 0.45
-            ax.bar(centers - width/2, strong_all, width=width, color='#aa7777', hatch='', edgecolor='k', label='strong phase')
-            ax.bar(centers + width/2, weak_all,   width=width, color='#7777aa', hatch='', edgecolor='k', label='weak phase')
-            ax.legend(loc='center right')
-            
-            fname = 'bars_seasonal_totals_{}_olr.png'.format(mode)
-            plt.savefig(fname, dpi=120)
-    
-        f = plt.figure(figsize=(8,5))
-        ax = plt.subplot(111)
-        
-        ax.set_title('Distribution of MD {} points\nin BoB JJAS: {} (OLR) EOFs'.format(points_type.capitalize(), mode.capitalize()), size=16)
-        ax.set_xlabel('Phase', size=12)
-        if normalize:
-            ax.set_ylabel('# Track Points / # Total Points in Phase', size=12)
-        else:
-            ax.set_ylabel('# Total Points in Phase', size=12)
-        
-        centers = np.arange(1, 9)
-        width = 0.45
-        ax.bar(centers - width/2, strong, width=width, color='#aa7777', hatch='', edgecolor='k', label='strong phase')
-        ax.bar(centers + width/2, weak,   width=width, color='#7777aa', hatch='', edgecolor='k', label='weak phase')
-        ax.legend(loc='center right')
-    
-        if normalize:
-            fname = 'bars_{}_pts_fraction_{}_olr.png'.format(points_type, mode)
-        else:
-            fname = 'bars_{}_pts_totals_{}_olr.png'.format(points_type, mode)
-        plt.savefig(fname, dpi=120)
-    
-    plt.show()
+    ##################################################################################
+    #### PLOT DATA
+    ##################################################################################
+    ##normalize = True
+    #normalize = False
+    #show_season_totals = True
+    ##show_season_totals = False
+    #for mode in ['weekly', 'biweekly']:
+    #    print('Mode: {}'.format(mode))
+    #    strong = np.zeros((8))
+    #    weak   = np.zeros((8))
+    #    for phase in range(1, 9):
+    #        if mode == 'biweekly':
+    #            strong[phase-1] = strat_array[np.where(np.logical_and( strat_array[:, 0] >= amp_thresh, strat_array[:, 1] == phase ))].shape[0]
+    #            weak[phase-1] =   strat_array[np.where(np.logical_and( strat_array[:, 0]  < amp_thresh, strat_array[:, 1] == phase ))].shape[0]
+    #        elif mode == 'weekly':
+    #            strong[phase-1] = strat_array[np.where(np.logical_and( strat_array[:, 2] >= amp_thresh, strat_array[:, 3] == phase ))].shape[0]
+    #            weak[phase-1] =   strat_array[np.where(np.logical_and( strat_array[:, 2]  < amp_thresh, strat_array[:, 3] == phase ))].shape[0]
+    #    print('Strong: {}, sum = {}'.format(strong, np.sum(strong)))
+    #    print('Weak: {}, sum = {}'.format(weak, np.sum(weak)))
+    #    print('total: {}'.format(np.sum(strong+weak)))
+    #   
+    #    if normalize or show_season_totals:
+    #        strong_all = np.zeros((8))
+    #        weak_all   = np.zeros((8))
+    #        for i in range(PC_vals.shape[0]):
+    #            eof1, eof2, eof3, eof4, eof5, eof6, eof7, eof8 = PC_vals[i, :]
+    #        
+    #            if mode == 'biweekly':
+    #                x = eof1; y = eof2
+    #            elif mode == 'weekly':
+    #                x = eof3; y = eof4
+    #        
+    #            amp = np.sqrt(x**2 + y**2)
+    #            angle = get_angle_deg(x, y)
+    #        
+    #            if amp > amp_thresh:
+    #                strong_all[get_phase(angle) - 1] += 1
+    #            else:
+    #                weak_all[get_phase(angle) - 1] += 1
+    #        if normalize: 
+    #            strong /= strong_all
+    #            weak /= weak_all
+    #   
+    #    if show_season_totals:
+    #        f = plt.figure(figsize=(8,5))
+    #        ax = plt.subplot(111)
+    #        
+    #        ax.set_title('Distribution of {} (OLR) EOFs in JJAS'.format(mode.capitalize()), size=16)
+    #        ax.set_xlabel('Phase', size=12)
+    #        ax.set_ylabel('# Total Points in Phase', size=12)
+    #        
+    #        centers = np.arange(1, 9)
+    #        width = 0.45
+    #        ax.bar(centers - width/2, strong_all, width=width, color='#aa7777', hatch='', edgecolor='k', label='strong phase')
+    #        ax.bar(centers + width/2, weak_all,   width=width, color='#7777aa', hatch='', edgecolor='k', label='weak phase')
+    #        ax.legend(loc='center right')
+    #        
+    #        fname = 'bars_seasonal_totals_{}_olr.png'.format(mode)
+    #        plt.savefig(fname, dpi=120)
+    #
+    #    f = plt.figure(figsize=(8,5))
+    #    ax = plt.subplot(111)
+    #    
+    #    ax.set_title('Distribution of MD {} points\nin BoB JJAS: {} (OLR) EOFs'.format(points_type.capitalize(), mode.capitalize()), size=16)
+    #    ax.set_xlabel('Phase', size=12)
+    #    if normalize:
+    #        ax.set_ylabel('# Track Points / # Total Points in Phase', size=12)
+    #    else:
+    #        ax.set_ylabel('# Total Points in Phase', size=12)
+    #    
+    #    centers = np.arange(1, 9)
+    #    width = 0.45
+    #    ax.bar(centers - width/2, strong, width=width, color='#aa7777', hatch='', edgecolor='k', label='strong phase')
+    #    ax.bar(centers + width/2, weak,   width=width, color='#7777aa', hatch='', edgecolor='k', label='weak phase')
+    #    ax.legend(loc='center right')
+    #
+    #    if normalize:
+    #        fname = 'bars_{}_pts_fraction_{}_olr.png'.format(points_type, mode)
+    #    else:
+    #        fname = 'bars_{}_pts_totals_{}_olr.png'.format(points_type, mode)
+    #    plt.savefig(fname, dpi=120)
+    #
+    #plt.show()
 
     ##################################################################################
     #### PLOT DATA (vort)

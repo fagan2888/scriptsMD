@@ -420,17 +420,23 @@ idir = '/home/hpeter/Research2018/MD_files/composites/'
 #plot2dxy_lag('composite_n150_V_JJAS_strat_harm_ttest_lag', lags=lags012, lvl=850)
 #plot2dxy_lag('composite_n150_V_JJAS_strat_harm_ttest_lag', lags=lags012, lvl=300)
 
+# genesis points
 #phases = '1678'; mode = 'biweekly'; n = '91'
 #phases = '1238'; mode = 'weekly'; n = '87'
+
+# all EOFs
 #phases = '1678'; mode = 'biweekly'; n = '4201'
 #phases = '1238'; mode = 'weekly'; n = '4271'
 #phases = '1278'; mode = 'weekly'; n = '4271'
 #phases = '1234'; mode = 'biweekly'; n = '4318'
-#phases = '1234'; mode = 'biweekly'; n = '2359'
-phases = '1278'; mode = 'weekly'; n = '2383'
 
-lvls   = [850, 500, 300]
-#lvls = [850]
+# all tracks
+#phases = '1234'; mode = 'biweekly'; n = '2359'
+#phases = '1278'; mode = 'weekly'; n = '2383'
+#phases = '5678'; mode = 'biweekly'; n = '1465'
+#phases = '3456'; mode = 'weekly'; n = '1416'
+
+lvls   = [850, 500]
 
 for lvl in lvls:
     #plot2dxy_lag_vector_indiv('composite_n{}_U_{}{}_lag'.format(n, mode, phases), 
