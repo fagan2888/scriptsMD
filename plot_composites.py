@@ -169,8 +169,10 @@ def plot2dxy_lag_vector_indiv(ufilenames, vfilenames,
         if zoom:
             fname = '/home/hpeter/Research2018/images/winds{}mb_{}{}_zoomed_lag{}.png'.format(lvl, mode, phases, lag)
         else:
-            fname = '/home/hpeter/Research2018/images/winds{}mb_{}{}_lag{}.png'.format(lvl, mode, phases, lag)
-#        plt.savefig(fname, dpi=120)
+            # fname = 'genesis_{}mb_n{}_int{}_{}{}_vort850_{}.png'.format(lvl, n, intensities, mode, phases, lag+2)
+            fname = 'tracks_{}mb_n{}_int{}_{}{}_vort850_{}.png'.format(lvl, n, intensities, mode, phases, lag+2)
+        print(fname)
+        plt.savefig(fname, dpi=100)
 
 def plot2dxy_lag_vector(ufilenames, vfilenames,
                         ufilenames_ttest=None, 
@@ -426,37 +428,50 @@ idir = '/home/hpeter/Research2018/MD_files/composites/'
 #plot2dxy_lag('composite_n150_V_JJAS_strat_harm_ttest_lag', lags=lags012, lvl=300)
 
 
-# genesis points
-#phases = '1678'; mode = 'biweekly'; n = '91'
-#phases = '1238'; mode = 'weekly'; n = '87'
+# n = 97; intensities = '123'; mode ='weekly'; phases ='1678'
+# n = 47; intensities = '123'; mode ='weekly'; phases ='2345'
 
-# all tracks
-# phases = '1234'; mode = 'biweekly'; n = '2359'
-# phases = '1234'; mode = 'biweekly'; n = '1129'
-
-# phases = '1278'; mode = 'weekly'; n = '2383'
-phases = '1278'; mode = 'weekly'; n = '1222'
-
-# phases = '5678'; mode = 'biweekly'; n = '1465'
-# phases = '3456'; mode = 'weekly'; n = '1416'
-
-lvls = [850]
+# n = 500; intensities = '123'; mode ='weekly'; phases ='1238'
+n = 500; intensities = '123'; mode ='weekly'; phases ='4567'
+lvls = [850, 500]
 for lvl in lvls:
-    #plot2dxy_lag_vector_indiv('composite_n{}_U_{}{}_lag'.format(n, mode, phases), 
-    #                    'composite_n{}_V_{}{}_lag'.format(n, mode, phases), 
-    #              'composite_n{}_U_{}{}_ttest_lag'.format(n, mode, phases),
-    #              'composite_n{}_V_{}{}_ttest_lag'.format(n, mode, phases),
-    #               lags=lags012, lvl=lvl, mode=mode, phases=phases, zoom=True)
-    # plot2dxy_lag_vector('composite_n{}_U_{}{}_lag'.format(n, mode, phases), 
-    #                     'composite_n{}_V_{}{}_lag'.format(n, mode, phases), 
-    #               'composite_n{}_U_{}{}_ttest_lag'.format(n, mode, phases),
-    #               'composite_n{}_V_{}{}_ttest_lag'.format(n, mode, phases),
-    #                lags=lags012, lvl=lvl, mode=mode, phases=phases)
-    plot2dxy_lag_vector('composite_n{}_U_int3_{}{}_lag'.format(n, mode, phases), 
-                        'composite_n{}_V_int3_{}{}_lag'.format(n, mode, phases), 
-                  'composite_n{}_U_int3_{}{}_ttest_lag'.format(n, mode, phases),
-                  'composite_n{}_V_int3_{}{}_ttest_lag'.format(n, mode, phases),
-                   lags=lags012, lvl=lvl, mode=mode, phases=phases)
+    plot2dxy_lag_vector_indiv('composite_n{}_int{}_U_{}{}_vort850_lag'.format(n, intensities, mode, phases), 
+                              'composite_n{}_int{}_V_{}{}_vort850_lag'.format(n, intensities, mode, phases), 
+                              'composite_n{}_int{}_U_{}{}_vort850_ttest_lag'.format(n, intensities, mode, phases),
+                              'composite_n{}_int{}_V_{}{}_vort850_ttest_lag'.format(n, intensities, mode, phases),
+                               lags=lags012, lvl=lvl, mode=mode, phases=phases, zoom=False)
+
+## genesis points
+##phases = '1678'; mode = 'biweekly'; n = '91'
+##phases = '1238'; mode = 'weekly'; n = '87'
+
+## all tracks
+## phases = '1234'; mode = 'biweekly'; n = '2359'
+## phases = '1234'; mode = 'biweekly'; n = '1129'
+
+## phases = '1278'; mode = 'weekly'; n = '2383'
+## phases = '1278'; mode = 'weekly'; n = '1222'
+
+## phases = '5678'; mode = 'biweekly'; n = '1465'
+## phases = '3456'; mode = 'weekly'; n = '1416'
+
+#lvls = [850]
+#for lvl in lvls:
+#    #plot2dxy_lag_vector_indiv('composite_n{}_U_{}{}_lag'.format(n, mode, phases), 
+#    #                    'composite_n{}_V_{}{}_lag'.format(n, mode, phases), 
+#    #              'composite_n{}_U_{}{}_ttest_lag'.format(n, mode, phases),
+#    #              'composite_n{}_V_{}{}_ttest_lag'.format(n, mode, phases),
+#    #               lags=lags012, lvl=lvl, mode=mode, phases=phases, zoom=True)
+#    # plot2dxy_lag_vector('composite_n{}_U_{}{}_lag'.format(n, mode, phases), 
+#    #                     'composite_n{}_V_{}{}_lag'.format(n, mode, phases), 
+#    #               'composite_n{}_U_{}{}_ttest_lag'.format(n, mode, phases),
+#    #               'composite_n{}_V_{}{}_ttest_lag'.format(n, mode, phases),
+#    #                lags=lags012, lvl=lvl, mode=mode, phases=phases)
+#    plot2dxy_lag_vector('composite_n{}_U_int3_{}{}_lag'.format(n, mode, phases), 
+#                        'composite_n{}_V_int3_{}{}_lag'.format(n, mode, phases), 
+#                  'composite_n{}_U_int3_{}{}_ttest_lag'.format(n, mode, phases),
+#                  'composite_n{}_V_int3_{}{}_ttest_lag'.format(n, mode, phases),
+#                   lags=lags012, lvl=lvl, mode=mode, phases=phases)
 
 # all EOFs
 #phases = '1678'; mode = 'biweekly'; n = '4201'
