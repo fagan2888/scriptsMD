@@ -71,15 +71,13 @@ print('Creating composites: printing to latest out file in {}.\n'.format(os.getc
 
 # Load event data
 print('Loading event data...')
-#strat = 'weekly1238'
-#trx_data = np.load(track_dir + 'BoB_genesis_pts_{}.npz'.format(strat))
-#strat = 'biweekly1234'
-#strat = 'weekly1278'
-strat = 'biweekly5678'
-trx_data_fname = track_dir + 'BoB_track_pts_{}.npz'.format(strat)
+strat = 'weekly1238'
+intensities = '123'
+trx_data_fname = track_dir + 'BoB_track_pts_int{}_{}_vort850.npz'.format(intensities, strat)
 trx_data = np.load(trx_data_fname)
 trx_data = trx_data['arr_0']
 print('Data loaded from {}'.format(trx_data_fname))
+
 # Center point of data
 centery = (21 + 16) / 2
 centerx = (93 + 83) / 2
@@ -98,7 +96,8 @@ lags = [-2, -1, 0, 1, 2]
 
 
 # Pressure levels
-levels = [850, 500, 300]
+# levels = [850, 500, 300]
+levels = [850, 500]
 
 # Put all the data in a giant array for processing
 data_total = np.zeros( (len(lags), N, len(levels), 256, 512) )

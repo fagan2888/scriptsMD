@@ -265,7 +265,8 @@ def plot2dxy_lag_vector(ufilenames, vfilenames,
             ax.set_title('lag ${}$'.format(lag))
     plt.tight_layout(pad=3, w_pad=-6)
     #fname = '/home/hpeter/Research2018/images/call20180712/winds{}mb_{}{}.png'.format(lvl, mode, phases)
-    #plt.savefig(fname, dpi=120)
+    fname = 'winds{}mb_alltracks_int23_{}{}_olr.png'.format(lvl, mode, phases)
+    plt.savefig(fname, dpi=120)
 
 def plot2dxz_lag(filenames, title='Default lags, ttest', lags=[-2,-1,0,1,2], ttest=True):
     # setup
@@ -329,14 +330,17 @@ def plot2dxy_vector_EOF(ufilenames, vfilenames,
                         phases='1234', 
                         amp='strong', zoom=False):
     # setup
-    title='Significant Anomalous Wind\n({} mb, n = {}, {} {} mode phases {})'.format(lvl, n, amp, mode, phases) 
+    title='Significant Anomalous Wind\n({} mb, n = {}, {} {} mode phase {})'.format(lvl, n, amp, mode, phases) 
     proj = ccrs.PlateCarree()
     if zoom:
-        llon = 55; rlon = 125; blat = -10; tlat = 35
+        llon = 20; rlon = 170; blat = -15; tlat = 40
     else:
         llon = 35; rlon = 145; blat = -30; tlat = 55
 
-    f = plt.figure(figsize=(8,8))
+    if zoom:
+        f = plt.figure(figsize=(12,5))
+    else:
+        f = plt.figure(figsize=(8,8))
     ax = plt.subplot(111, projection=proj)
 
     # map
@@ -387,13 +391,13 @@ def plot2dxy_vector_EOF(ufilenames, vfilenames,
     U = u_comp.values; V = v_comp.values
     
     if zoom:
-        skip = 1
+        skip = 2
     else:
         skip = 2
     if zoom:
         Q = ax.quiver(x[::skip], y[::skip], U[::skip, ::skip], V[::skip, ::skip],
-                    pivot='mid', units='inches', scale=40, scale_units='width',
-                    headwidth=5, headlength=3, headaxislength=2, lw=0.1)
+                    pivot='mid', units='inches', scale=80, scale_units='width',
+                    headwidth=6, headlength=4, headaxislength=2.5, width=0.01)
     else:
         Q = ax.quiver(x[::skip], y[::skip], U[::skip, ::skip], V[::skip, ::skip],
                     pivot='mid', units='inches', scale=25, scale_units='width',
@@ -403,10 +407,11 @@ def plot2dxy_vector_EOF(ufilenames, vfilenames,
     ax.set_title(title)
     plt.tight_layout(pad=5)
     if zoom:
-        fname = '/home/hpeter/Research2018/images/winds{}mb_{}{}_zoomed_EOFs.png'.format(lvl, mode, phases)
+        fname = 'EOFs_vort850_UV_{}mb_{}{}.png'.format(lvl, mode, phases)
     else:
-        fname = '/home/hpeter/Research2018/images/winds{}mb_{}{}_EOFs.png'.format(lvl, mode, phases)
-#    plt.savefig(fname, dpi=120)
+        fname = 'EOFs_vort850_UV_{}mb_{}{}.png'.format(lvl, mode, phases)
+    plt.savefig(fname, dpi=120)
+    plt.close()
 
 lags0 = [0]
 lags02 = [-2, 0, 2]
@@ -420,9 +425,38 @@ idir = '/home/hpeter/Research2018/MD_files/composites/'
 #plot2dxy_lag('composite_n150_V_JJAS_strat_harm_ttest_lag', lags=lags012, lvl=850)
 #plot2dxy_lag('composite_n150_V_JJAS_strat_harm_ttest_lag', lags=lags012, lvl=300)
 
+
 # genesis points
 #phases = '1678'; mode = 'biweekly'; n = '91'
 #phases = '1238'; mode = 'weekly'; n = '87'
+
+# all tracks
+# phases = '1234'; mode = 'biweekly'; n = '2359'
+# phases = '1234'; mode = 'biweekly'; n = '1129'
+
+# phases = '1278'; mode = 'weekly'; n = '2383'
+phases = '1278'; mode = 'weekly'; n = '1222'
+
+# phases = '5678'; mode = 'biweekly'; n = '1465'
+# phases = '3456'; mode = 'weekly'; n = '1416'
+
+lvls = [850]
+for lvl in lvls:
+    #plot2dxy_lag_vector_indiv('composite_n{}_U_{}{}_lag'.format(n, mode, phases), 
+    #                    'composite_n{}_V_{}{}_lag'.format(n, mode, phases), 
+    #              'composite_n{}_U_{}{}_ttest_lag'.format(n, mode, phases),
+    #              'composite_n{}_V_{}{}_ttest_lag'.format(n, mode, phases),
+    #               lags=lags012, lvl=lvl, mode=mode, phases=phases, zoom=True)
+    # plot2dxy_lag_vector('composite_n{}_U_{}{}_lag'.format(n, mode, phases), 
+    #                     'composite_n{}_V_{}{}_lag'.format(n, mode, phases), 
+    #               'composite_n{}_U_{}{}_ttest_lag'.format(n, mode, phases),
+    #               'composite_n{}_V_{}{}_ttest_lag'.format(n, mode, phases),
+    #                lags=lags012, lvl=lvl, mode=mode, phases=phases)
+    plot2dxy_lag_vector('composite_n{}_U_int3_{}{}_lag'.format(n, mode, phases), 
+                        'composite_n{}_V_int3_{}{}_lag'.format(n, mode, phases), 
+                  'composite_n{}_U_int3_{}{}_ttest_lag'.format(n, mode, phases),
+                  'composite_n{}_V_int3_{}{}_ttest_lag'.format(n, mode, phases),
+                   lags=lags012, lvl=lvl, mode=mode, phases=phases)
 
 # all EOFs
 #phases = '1678'; mode = 'biweekly'; n = '4201'
@@ -430,28 +464,16 @@ idir = '/home/hpeter/Research2018/MD_files/composites/'
 #phases = '1278'; mode = 'weekly'; n = '4271'
 #phases = '1234'; mode = 'biweekly'; n = '4318'
 
-# all tracks
-#phases = '1234'; mode = 'biweekly'; n = '2359'
-#phases = '1278'; mode = 'weekly'; n = '2383'
-#phases = '5678'; mode = 'biweekly'; n = '1465'
-#phases = '3456'; mode = 'weekly'; n = '1416'
+#mode = 'weekly'
+#lvls = [850]
+#ns = ['2303', '2198', '1939', '1832', '1843','2108', '2274', '2370']
+#ps = ['1', '2', '3', '4', '5', '6', '7', '8']
+#for n, phases in zip(ns, ps):
+#    for lvl in lvls:
+#        plot2dxy_vector_EOF('composite_EOFs_n{}_U_vort850_{}{}.nc'.format(n, mode, phases), 
+#                            'composite_EOFs_n{}_V_vort850_{}{}.nc'.format(n, mode, phases), 
+#                      'composite_EOFs_n{}_U_vort850_{}{}_ttest.nc'.format(n, mode, phases),
+#                      'composite_EOFs_n{}_V_vort850_{}{}_ttest.nc'.format(n, mode, phases),
+#                      lvl=lvl, mode=mode, phases=phases, zoom=True)
 
-lvls   = [850, 500]
-
-for lvl in lvls:
-    #plot2dxy_lag_vector_indiv('composite_n{}_U_{}{}_lag'.format(n, mode, phases), 
-    #                    'composite_n{}_V_{}{}_lag'.format(n, mode, phases), 
-    #              'composite_n{}_U_{}{}_ttest_lag'.format(n, mode, phases),
-    #              'composite_n{}_V_{}{}_ttest_lag'.format(n, mode, phases),
-    #               lags=lags012, lvl=lvl, mode=mode, phases=phases, zoom=True)
-    plot2dxy_lag_vector('composite_n{}_U_{}{}_lag'.format(n, mode, phases), 
-                        'composite_n{}_V_{}{}_lag'.format(n, mode, phases), 
-                  'composite_n{}_U_{}{}_ttest_lag'.format(n, mode, phases),
-                  'composite_n{}_V_{}{}_ttest_lag'.format(n, mode, phases),
-                   lags=lags012, lvl=lvl, mode=mode, phases=phases)
-    #plot2dxy_vector_EOF('composite_EOFs_n{}_U_{}{}.nc'.format(n, mode, phases), 
-    #                    'composite_EOFs_n{}_V_{}{}.nc'.format(n, mode, phases), 
-    #              'composite_EOFs_n{}_U_{}{}_ttest.nc'.format(n, mode, phases),
-    #              'composite_EOFs_n{}_V_{}{}_ttest.nc'.format(n, mode, phases),
-    #              lvl=lvl, mode=mode, phases=phases)
-plt.show()
+# plt.show()
