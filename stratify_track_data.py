@@ -104,8 +104,8 @@ if __name__ == '__main__':
     PC_vals = np.loadtxt(PC_vals_fname)
    
     # set params: 
-    #points_type = 'genesis'
-    points_type = 'track'
+    points_type = 'genesis'
+    # points_type = 'track'
     if points_type == 'genesis':
         MD_set = trx_NH[geninits_NH - 1, :]
     elif points_type == 'track':
@@ -300,7 +300,9 @@ if __name__ == '__main__':
     
     mode   = 'weekly'
     # phases = '1238'
-    phases = '4567'
+    # phases = '4567'
+    # phases = '1678'
+    phases = '2345'
     strat = MD_set[np.where(np.logical_and( strat_array[:, 0] >= amp_thresh, 
                             np.logical_or(strat_array[:, 1] == int(phases[0]),
                             np.logical_or(strat_array[:, 1] == int(phases[1]),
